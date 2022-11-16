@@ -59,7 +59,7 @@ const Composition = () => {
     }
     
     const showResult = () => {
-        
+        localStorage.removeItem('finish-exam')
     }
     
     const join_room1 = useCallback(
