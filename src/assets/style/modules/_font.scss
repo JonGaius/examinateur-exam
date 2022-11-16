@@ -1,0 +1,40 @@
+@font-face {
+    font-family: 'Author-Bold';
+    src: url('../../fonts/Author-Bold.woff2') format('woff2'),
+         url('../../fonts/Author-Bold.woff') format('woff'),
+         url('../../fonts/Author-Bold.ttf') format('truetype');
+         font-weight: 700;
+         font-display: swap;
+         font-style: normal;
+}
+  
+@font-face {
+    font-family: 'Author-Medium';
+    src: url('../../fonts/Author-Medium.woff2') format('woff2'),
+         url('../../fonts/Author-Medium.woff') format('woff'),
+         url('../../fonts/Author-Medium.ttf') format('truetype');
+         font-weight: 500;
+         font-display: swap;
+         font-style: normal;
+}
+
+@font-face {
+  font-family: 'Author-Regular';
+  src: url('../../fonts/Author-Regular.woff2') format('woff2'),
+       url('../../fonts/Author-Regular.woff') format('woff'),
+       url('../../fonts/Author-Regular.ttf') format('truetype');
+       font-weight: 400;
+       font-display: swap;
+       font-style: normal;
+}
+
+@font-face {
+  font-family: 'Author-Italic';
+  src: url('../../fonts/Author-Italic.woff2') format('woff2'),
+       url('../../fonts/Author-Italic.woff') format('woff'),
+       url('../../fonts/Author-Italic.ttf') format('truetype');
+       font-weight: 400;
+       font-display: swap;
+       font-style: italic;
+}
+

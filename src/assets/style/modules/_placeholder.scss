@@ -1,0 +1,27 @@
+%flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+%flex-vertical-center {
+    display: flex;
+    align-items: center;
+}
+%image-center {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    object-position: center;
+}
+
+%image-height-auto{
+    width: 100% !important;
+    height: auto;
+}
+%image-width-auto{
+    height: 100% !important;
+    width: auto;
+}
+%list-style-none{
+    list-style: none;
+}
