@@ -9,7 +9,7 @@ const getTodayExams = async (data, token) => {
     // }
     
     const response = await axios.post(APIURL + `gestion_examen/examens/get_examen_examinateur_du_jour/`, data)
-
+    // console.log(response.data)
     return response.data
 }
 
@@ -53,7 +53,18 @@ const getExam = async (data, token) => {
     //     },
     // }
     
-    const response = await axios.get(APIURL + `authentifications/users/${data}/`)
+    const response = await axios.get(APIURL + `gestion_examen/examens/${data}/`)
+    
+    return response.data
+}
+const updateExam = async (data, token) => {
+    // const config = {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    // }
+    
+    const response = await axios.patch(APIURL + `gestion_examen/examens/${data}/`)
     
     return response.data
 }
@@ -61,7 +72,8 @@ const examenService = {
     getMyPrograms,
     getExam,
     getTodayExams,
-    getSujets
+    getSujets,
+    updateExam
 }
 
 export default examenService

@@ -5,17 +5,17 @@ import audio from "../../../assets/audio/sonnerie-reveil.mp3"
 
 const music = new Audio(audio);
 
-const Timer = ({fnc, socket, examen}) => {
+const Timer = ({fnc, socket, time = 30 * 8, examen}) => {
     const green = "#EF233C"
     const [secondLeft, setSecondLeft] = useState(0)
     const secondLeftRef = useRef(secondLeft)
     const settingsInfo = {
-        workMinutes: 45
+        workMinutes: 2
     }
     
     
     useEffect(() => {
-        secondLeftRef.current = 45 * 60
+        secondLeftRef.current = time
         setSecondLeft(secondLeftRef.current)
         const timer = setInterval(() => {
             if(secondLeftRef.current === 0){
@@ -39,7 +39,7 @@ const Timer = ({fnc, socket, examen}) => {
         }, 1000)
         return () => clearInterval(timer)
 
-    },[fnc,socket,examen])
+    },[fnc,socket,time,examen])
     return (
         <CircularProgressbar value={secondLeft / (60 * settingsInfo.workMinutes) * 100} text={`${Math.floor(secondLeft / 60)} : ${(secondLeft % 60) < 10 ? "0"+secondLeft % 60 : secondLeft % 60}`} styles={buildStyles({
             pathColor: green,

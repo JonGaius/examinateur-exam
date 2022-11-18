@@ -62,7 +62,9 @@ const Test = () => {
                                 <StartIcon/>
                             </div>
                             <div className='sigepec-page-content-start__text'>
-                                <strong>Démarrer la composition l'examen</strong>
+                                <p>Code de l'examen:</p>
+                                <h2>{state.exam.exam.code_examen}</h2><br />
+                                <span>Démarrer la composition l'examen</span>
                             </div>
                         </button>
                     </div>

@@ -23,7 +23,6 @@ const Appel = () => {
     const [user, setUser] = useState("")
     const [errors, setErrors] = useState("")
     const [list, setList] = useState([])
-
     let navigate = useNavigate()
 
     const dispatch = useDispatch()
@@ -53,7 +52,7 @@ const Appel = () => {
     },[join_room])
 
     const checkCandidantIn = (id, statut) => {
-        if(id && statut){
+        if(id){
 
             let candidat = {
                 candidat_id: parseInt(id),
@@ -143,14 +142,14 @@ const Appel = () => {
                 <div className='sigepec-page-header'>
                     {/* <h1>📖</h1> */}
                     <div className='sigepec-page-createSteps'>
-                        <strong className='active'>Check In</strong>  - <span>Composition</span>
+                        <strong className='active'>1. Check In</strong>  - <span>2. Composition</span>
                     </div>
                     <h2>Check-In</h2>
+                    <p>Code de l'examen: <strong>{state.exam.code_examen}</strong></p>
                 </div>
                 <div className='sigepec-page-content'>
                     <form className="sigepec-page-form" onSubmit={closeCheckIn}>
                         <div className='sigepec-page-form__actions special'>
-                           
                             <div className='sigepec-page-form__action'>
                                 {
                                     state && state.exam.candidatexamen_set && list.length === state.exam.candidatexamen_set.length ? (
@@ -178,67 +177,66 @@ const Appel = () => {
                             <div className='sigepec-h-bar'></div>
                             {
                                 state && state.exam.candidatexamen_set && state.exam.candidatexamen_set.length > 0 ? (
-                                   (
-                                        state.exam.candidatexamen_set.map((candidat, index) => (
-                                            <div className='sigepec-page-form-table__row' key={index}>
-                                                <div className='sigepec-page-form-table__col col-1'>
-                                                    <strong>{candidat.programmation_candidat.candidat.id}</strong>
-                                                </div>
-                                                <div className='sigepec-page-form-table__col col-auto'>
-                                                    <div className='sigepec-page-form-table__item'>
-                                                        <div className='sigepec-page-form-table__avatar'>
-                                                            {
-                                                                candidat.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "photo-identite")[0] ? (
-                                                                    <img src={candidat.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "photo-identite")[0].url_fichier} alt="avatar" />
-                                                                ) : (
-                                                                    <UserIcon/>
-                                                                )
-                                                            }
-                                                        </div>
-                                                        <div className='sigepec-page-form-table__info'>
-                                                            <span>{candidat.programmation_candidat.candidat.dossier.numero_dossier} </span><br />
-                                                            <strong>{candidat.programmation_candidat.candidat.dossier.info_id.nom} {candidat.programmation_candidat.candidat.dossier.info_id.nom_de_jeune_fille ? ` née ${candidat.programmation_candidat.candidat.dossier.info_id.nom_de_jeune_fille}` : ""} {" "+candidat.programmation_candidat.candidat.dossier.info_id.prenom}</strong> <br />
-                                                            <span>Auto Ecole: {candidat.programmation_candidat.candidat.dossier.auto_ecole.nom_autoecole}</span>
+                                    (
+                                            state.exam.candidatexamen_set.map((candidat, index) => (
+                                                <div className='sigepec-page-form-table__row' key={index}>
+                                                    <div className='sigepec-page-form-table__col col-1'>
+                                                        <strong>{candidat.programmation_candidat.candidat.id}</strong>
+                                                    </div>
+                                                    <div className='sigepec-page-form-table__col col-auto'>
+                                                        <div className='sigepec-page-form-table__item'>
+                                                            <div className='sigepec-page-form-table__avatar'>
+                                                                {
+                                                                    candidat.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "photo-identite")[0] ? (
+                                                                        <img src={"https://sigepec.hisiastudio.com/"+candidat.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "photo-identite")[0].url_fichier} alt="avatar" />
+                                                                    ) : (
+                                                                        <UserIcon/>
+                                                                    )
+                                                                }
+                                                            </div>
+                                                            <div className='sigepec-page-form-table__info'>
+                                                                <span>{candidat.programmation_candidat.candidat.dossier.numero_dossier} </span><br />
+                                                                <strong>{candidat.programmation_candidat.candidat.dossier.info_id.nom} {candidat.programmation_candidat.candidat.dossier.info_id.nom_de_jeune_fille ? ` née ${candidat.programmation_candidat.candidat.dossier.info_id.nom_de_jeune_fille}` : ""} {" "+candidat.programmation_candidat.candidat.dossier.info_id.prenom}</strong> <br />
+                                                                <span>Auto Ecole: {candidat.programmation_candidat.candidat.dossier.auto_ecole.nom_autoecole}</span>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div className='sigepec-page-form-table__col col-mid'>
-                                                    {   
-                                                        list.length > 0 && list.filter(el => el.candidat_id === candidat.id).length > 0? (
-
-                                                            list.filter(el => el.candidat_id === candidat.id)[0].presence ? (
-
-                                                                <span className='sigepec-chip sigepec-chip--success'>
-                                                                    Présent
-                                                                </span>
+                                                    <div className='sigepec-page-form-table__col col-mid'>
+                                                        {   
+                                                            list.length > 0 && list.filter(el => el.candidat_id === candidat.id).length > 0? (
+    
+                                                                list.filter(el => el.candidat_id === candidat.id)[0].presence ? (
+    
+                                                                    <span className='sigepec-chip sigepec-chip--success'>
+                                                                        Présent
+                                                                    </span>
+                                                                ) : (
+    
+                                                                    <span className='sigepec-chip sigepec-chip--danger'>
+                                                                        Absent
+                                                                    </span>
+                                                                )
                                                             ) : (
-
-                                                                <span className='sigepec-chip sigepec-chip--danger'>
-                                                                    Absent
+                                                                <span className='sigepec-chip'>
+                                                                    -
                                                                 </span>
                                                             )
-                                                        ) : (
-                                                            <span className='sigepec-chip'>
-                                                                -
-                                                            </span>
-                                                        )
-                                                    }
-                                                    
+                                                        }
+                                                        
+                                                    </div>
+                                                    <div className='sigepec-page-form-table__col col-actions'>
+                                                        <button type='button' className='sigepec-button-icon sigepec-button-icon--normal' onClick={() => showModal("show-modal", candidat)} >
+                                                            <EyeIcon/> <span>Editer</span>
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                                <div className='sigepec-page-form-table__col col-actions'>
-                                                    <button type='button' className='sigepec-button-icon sigepec-button-icon--normal' onClick={() => showModal("show-modal", candidat)} >
-                                                        <EyeIcon/> <span>Editer</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        ))
+                                            ))
+                                        )
+                                    ) : (
+                                        <strong>Aucun candidat programmé</strong>
                                     )
-                                ) : (
-                                    <strong>Aucun candidat programmé</strong>
-                                )
-
+                                
                             }
-                            
                         </div>
                     </form>
                 </div>
@@ -261,13 +259,14 @@ const Appel = () => {
                                         <div className='sigepec-modal-user__image'>
                                         {
                                             user.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "photo-identite")[0] ? (
-                                                <img src={user.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "photo-identite")[0].url_fichier} alt="avatar" />
+                                                <img src={"https://sigepec.hisiastudio.com/"+user.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "photo-identite")[0].url_fichier} alt="avatar" />
                                             ) : (
                                                 <UserIcon/>
                                             )
                                         }
                                         </div>
                                         <div className='sigepec-modal-user__info'>
+                                            <p>Numero: <strong> {user.programmation_candidat.candidat.id}</strong></p> <br />
                                             <span>{user.programmation_candidat.candidat.dossier.numero_dossier} </span><br />
                                             <strong>{user.programmation_candidat.candidat.dossier.info_id.nom} {user.programmation_candidat.candidat.dossier.info_id.nom_de_jeune_fille ? ` née ${user.programmation_candidat.candidat.dossier.info_id.nom_de_jeune_fille}` : ""} {" "+user.programmation_candidat.candidat.dossier.info_id.prenom}</strong> <br />
                                             <span>Auto Ecole: {user.programmation_candidat.candidat.dossier.auto_ecole.nom_autoecole}</span>

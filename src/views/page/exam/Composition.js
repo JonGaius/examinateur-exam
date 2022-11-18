@@ -5,15 +5,14 @@ import SadIllustration from '../../../assets/illustrations/SadIllustration';
 import { getMe, reset } from '../../../features/auth/authSlice';
 import { getSujets } from '../../../features/examens/examenSlice';
 import { links } from '../../../router/constant';
-import Timer from '../../components/card/Timer';
 import EmptySection from '../../components/container/EmptySection';
+import QuestionContainer from '../../components/container/QuestionContainer';
+
 import MainLayout from '../../layout/MainLayout';
 import io from "socket.io-client"
 import { WEBSOCKETURL } from '../../../utils/constant';
-import { toArray } from '../../../utils/sharedFunction';
 
 const socket = io.connect(WEBSOCKETURL)
-const finished = JSON.parse(localStorage.getItem('finish-exam'));
 
 const Composition = () => {
     const {state} = useLocation()
@@ -28,40 +27,8 @@ const Composition = () => {
         (state) => state.examen
     )
     let navigate = useNavigate()
-    const [affiche, setAffiche] = useState(false)
     const [question, setQuestion] = useState(0)
 
-    const changeQuestion = () => {
-        if(sujets && sujets.sujet){
-            if(question > sujets.sujet.questions_choisies.length){
-                setQuestion(question + 1)
-            }else{
-                let data = {
-                    room: state.exam.exam.code_examen,
-                    statut: true,
-                }
-                socket.emit("finish_composition", data)
-                navigate(links.examCompositionFinish)
-            }
-        }
-    }
-
-    const cloreExam = () => {
-
-        let data = {
-            room: state.exam.exam.code_examen,
-            statut: true,
-        }
-        socket.emit("finish_composition", data)
-
-        setAffiche(true)
-        localStorage.setItem('finish-exam', JSON.stringify(true))
-    }
-    
-    const showResult = () => {
-        localStorage.removeItem('finish-exam')
-    }
-    
     const join_room1 = useCallback(
         () => {
             if(state){
@@ -139,109 +106,7 @@ const Composition = () => {
     return (
         <MainLayout title={"Demarrer la composition"} admin={me}>
             <div className='sigepec-page'>
-                {
-                    finished || affiche ? (
-                        <div className='sigepec-big-timer'>
-                                <h2>Examen Terminé</h2>
-                               
-                                
-                                <div className='sigepec-big-timer__btn' >
-                                    <button type='button' className='sigepec-button sigepec-button--primary' onClick={() => {
-                                        showResult()
-                                    }}>
-                                        Voir les résultats
-                                    </button>
-                                </div>
-                                    
-                            </div>
-                    ) : (
-                        (state && (state.exam.exam.details.mode === "tablette" || state.exam.exam.details.mode === "ordinateur")) ? (
-                            <div className='sigepec-big-timer'>
-                                <h2>Temps restant</h2>
-                                <Timer fnc={setAffiche} socket={socket} examen={state.exam.exam.code_examen}/>
-                                
-                                <div className='sigepec-big-timer__btn' >
-                                    <button type='button' className='sigepec-button sigepec-button--primary' onClick={() => {
-                                        cloreExam()
-                                    }}>
-                                        Clôre l'examen
-                                    </button>
-                                </div>
-                                    
-                            </div>
-                        ) : (
-                            isSujetSuccess && sujets && sujets.questions && (
-    
-                                <div className='sigepec-page__container2'>
-                                    <div className='sigepec-page-header2'>
-                                        <div className='sigepec-page-title'>
-                                            <strong>Question {question + 1} / {sujets.question.length}</strong>
-                                        </div>
-                                        <div className='sigepec-page-header2__actions'>
-                                            <div className='sigepec-page-header2__action'>
-                                                <button className='sigepec-button sigepec-button--primary' type='button' onClick={() => {
-                                                    changeQuestion()
-                                                }}>Suivant</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {
-                                        sujets.questions.length > 0 && (
-                                            <div className='sigepec-page-composition'>
-                                                <div className='sigepec-page-composition__image'>
-                                                    {
-                                                        sujets.questions[question].image_question && (
-                                                            <img src={sujets.questions[question].image_question} alt="sujet" />
-                                                        )
-                                                    }
-                                                    <button type='button' onClick={() => {
-                                                        if(document.querySelector(".sigepec-page-composition__image--big")){
-                                                            document.querySelector(".sigepec-page-composition__image--big").classList.add("is-show")
-                                                        }
-                                                    }}>
-                                                        Afficher l'image
-                                                    </button>
-                                                    {
-                                                        sujets.questions[question].image_question && (
-                                                            <div className='sigepec-page-composition__image--big' onClick={() => {
-                                                                if(document.querySelector(".sigepec-page-composition__image--big")){
-                                                                    document.querySelector(".sigepec-page-composition__image--big").classList.remove("is-show")
-                                                                }
-                                                            }}>
-                                                                <img src={sujets.questions[question].image_question} alt="sujet" />
-                                                            </div>
-                                                        )
-                                                    }
-                                                    
-                                                </div>
-                                                <div className='sigepec-page-composition__text'>
-    
-                                                    <h2>{sujets.questions[question] && sujets.questions[question].intitule_question}</h2>
-                                                    
-                                                    {
-                                                        sujets.questions[question] && sujets.questions[question].reponses.map((reponse, index) => (
-                                                            <div className='sigepec-page-composition__text--level2' key={index}>
-                                                                <strong>{reponse.intitule_reponse}</strong> <br />
-                                                                <div className='sigepec-page-composition__text--level2__reponses'>
-                                                                    {
-                                                                        toArray(reponse.reponse_possible).map((resp, index) => (
-                                                                            <span key={index}>{resp}</span>
-                                                                        ))
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                        ))
-                                                    }
-                                                    
-                                                </div>
-                                            </div>
-                                        )
-                                    }
-                                </div>
-                            )
-                        )
-                    ) 
-                }
+                {isSujetSuccess && sujets &&  <QuestionContainer exam={state} socket={socket} questIndex={question} fncQuesion={setQuestion} sujet={sujets} examen={state.exam.exam.code_examen} langue={state.exam.exam.details.langue}/>}
             </div>
         </MainLayout>
     );

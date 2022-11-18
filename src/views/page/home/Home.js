@@ -82,6 +82,7 @@ const Home = () => {
                                             state: examens.examens_du_jour[0]
                                         })
                                     }}>
+                                        {console.log(examens.examens_du_jour)}
                                         <div className='sigepec-page-content-start__icon'>
                                             <StartIcon/>
                                         </div>
