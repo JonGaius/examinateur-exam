@@ -48,6 +48,7 @@ const Home = () => {
             dispatch(examReset())
         }
     },[dispatch, examinateur])
+
     if(userAuth.isLoading || isLoading){
         return (
             <div className='sigepec-big-load'>
@@ -63,6 +64,7 @@ const Home = () => {
             </EmptySection>
         )
     }
+    
     return (
         <MainLayout title={"Accueil"} admin={me}>
             {
@@ -75,19 +77,19 @@ const Home = () => {
                         </div>
                         <div className='sigepec-page-content'>
                         {
-                            isSuccess && examens && examens.examens_du_jour && examens.examens_du_jour.length > 0 ? (
+                            isSuccess && examens && examens.examens_du_jour && examens.examens_du_jour.filter(el => el.statut_examen === "en attente").length > 0 ? (
                                 <div className='sigepec-page-content__start sigepec-page-content-start'>
                                     <button to={links.examIntro} type="button" className='sigepec-page-content-start__container' onClick={() => {
                                         navigate(links.examIntro, {
-                                            state: examens.examens_du_jour[0]
+                                            state: examens.examens_du_jour.filter(el => el.statut_examen === "en attente")[0]
                                         })
                                     }}>
-                                        {console.log(examens.examens_du_jour)}
+                                        {console.log(examens.examens_du_jour.filter(el => el.statut_examen === "en attente"))}
                                         <div className='sigepec-page-content-start__icon'>
                                             <StartIcon/>
                                         </div>
                                         <div className='sigepec-page-content-start__text'>
-                                            <span>Examen: {examens.examens_du_jour[0].code_examen} </span> <br />
+                                            <span>Examen: {examens.examens_du_jour.filter(el => el.statut_examen === "en attente")[0].code_examen} </span> <br />
                                             <strong>Commencer l'examen</strong>
                                         </div>
                                     </button>

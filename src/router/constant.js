@@ -1,10 +1,12 @@
 import Setting from "../views/page/account/Setting"
 import Login from "../views/page/auth/Login"
+import ErrorPage from "../views/page/errors/ErrorPage"
 import Appel from "../views/page/exam/Appel"
 import Composition from "../views/page/exam/Composition"
 import Finish from "../views/page/exam/Finish"
 import Introduce from "../views/page/exam/Introduce"
 import Test from "../views/page/exam/Test"
+import Etats from "../views/page/examen/Etats"
 import Examen from "../views/page/examen/Examen"
 import Home from "../views/page/home/Home"
 
@@ -67,5 +69,15 @@ export const routes = [
         path: links.account,
         Component: Setting,
         exact: true,
+    },
+    {
+        path: links.etats,
+        Component: Etats,
+        exact: true,
+    },
+    {
+        path: links.error,
+        Component: ErrorPage,
+        exact: false,
     },
 ]

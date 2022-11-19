@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {Link, NavLink, useNavigate} from 'react-router-dom';
-import CandidatIcon from '../../assets/icons/service/CandidatIcon';
+// import CandidatIcon from '../../assets/icons/service/CandidatIcon';
 // import ConfigIcon from '../../assets/icons/service/ConfigIcon';
 // import DossierIcon from '../../assets/icons/service/DossierIcon';
 // import EcoleIcon from '../../assets/icons/service/EcoleIcon';
@@ -53,11 +53,11 @@ const MainLayout = ({title, min = false, children, admin = null}) => {
         //     link: links.examinateurs,
         //     label: "Examinateurs"
         // },
-        {
-            Icon: CandidatIcon,
-            link: links.examIntro,
-            label: "Composition"
-        },
+        // {
+        //     Icon: CandidatIcon,
+        //     link: links.examIntro,
+        //     label: "Composition"
+        // },
         {
             Icon: ExamIcon,
             link: links.examens,

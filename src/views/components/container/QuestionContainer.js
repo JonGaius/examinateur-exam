@@ -119,6 +119,8 @@ const QuestionContainer = ({exam, questIndex, fncQuesion, sujet, socket,examen, 
                         statut: true,
                     }
                     socket.emit("finish_composition", datas)
+                    setAffiche(true)
+                    localStorage.setItem('finish-exam', JSON.stringify(true))
                 }
             }
             if(secondLeftRef.current > 0){
@@ -149,6 +151,7 @@ const QuestionContainer = ({exam, questIndex, fncQuesion, sujet, socket,examen, 
                 <div className='sigepec-examinateur-composition'>
                     <div className='sigepec-examinateur-composition__image'>
                         <img src={"https://sigepec.hisiastudio.com/" + sujet.questions[questIndex].image_question} alt="question" />
+                        
                     </div>
                     <div className='sigepec-examinateur-composition__container'>
                         <div className='sigepec-examinateur-composition__intitule sigepec-examinateur-composition-intitule'>

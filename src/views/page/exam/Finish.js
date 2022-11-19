@@ -29,7 +29,9 @@ const Finish = () => {
     const closeExamen = () => {
         const data = {
             id: state.exam.exam.id,
-            statut_examen: "terminer"
+            content: {
+                statut_examen: "terminer"
+            }
         }
         dispatch(updateExam(data))
     }
