@@ -564,6 +564,15 @@
     position: relative;
     margin-top: 50px;
     width: 100%;
+
+    .sigepec-page-tabContainer-header-tags{
+        position: relative;
+        width: auto;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
     .sigepec-page-tabContainer-header{
         position: relative;
         width: 100%;

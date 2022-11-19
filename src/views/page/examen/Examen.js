@@ -16,7 +16,7 @@ import CancelIcon from '../../../assets/icons/ui/CancelIcon';
 const Examen = () => {
 
     const limit = 10
-
+    const [type, setType] = useState("")
     const [examen, setExamen] = useState("");
     const [page, setPage] = useState(1)
     const [debut, setDebut] = useState(0)
@@ -40,11 +40,11 @@ const Examen = () => {
         setPage(page + 1)
     }
     const prevPage = () => {
-        setPage(page - 1)
         setDebut(debut - limit)
         setFin(fin - limit)
+        setPage(page - 1)
     }
-    
+
     const removeModal = (id) => {
         document.getElementById(id).classList.remove("is--show");
     }
@@ -135,9 +135,54 @@ const Examen = () => {
                                                 }
                                             </div>
 
+                                            <div className='sigepec-page-tabContainer-header-tags'>
+                                                    <div className='sigepec-page-tabContainer-header-tags__item'>
+                                                        <button type='button' className={`sigepec-tag ${type === "" ? "active" : ""}`} onClick={() => setType("")}>
+                                                            Tout afficher
+                                                        </button>
+                                                    </div>
+                                                    <div className='sigepec-page-tabContainer-header-tags__item'> 
+                                                    <button type='button' className={`sigepec-tag ${type === "en attente" ? "active" : ""}`} onClick={() => setType("en attente")}>
+                                                            En attente
+                                                        </button>
+                                                    </div>
+                                                    <div className='sigepec-page-tabContainer-header-tags__item'>
+                                                        <button type='button' className={`sigepec-tag ${type === "cloturer" ? "active" : ""}`} onClick={() => setType("cloturer")}>
+                                                            Clôturer
+                                                        </button>
+                                                    </div>
+                                                    <div className='sigepec-page-tabContainer-header-tags__item'>
+                                                        <button type='button' className={`sigepec-tag ${type === "terminer" ? "active" : ""}`} onClick={() => setType("terminer")}>
+                                                            Terminer
+                                                        </button>
+                                                    </div>
+                                                    <div className='sigepec-page-tabContainer-header-tags__item'>
+                                                        <button type='button' className={`sigepec-tag ${type === "annuler" ? "active" : ""}`} onClick={() => setType("annuler")}>
+                                                            Annuler
+                                                        </button>
+                                                    </div>
+                                                </div>
+
                                             {
                                                 examens && examens.length > 0 ? (
                                                     <div className='sigepec-page-tabContainer__body sigepec-page-tabContainer-body'>
+                                                        {
+                                                            parseInt(examens.length / limit) > 0 ? (
+                                                                <strong>
+                                                                    {
+                                                                        examens.length % limit > 0 ? (
+                                                                            `Page ${page} sur ${parseInt(examens.length / limit) + 1}`
+                                                                        ) : (
+                                                                            `Page ${page} sur ${parseInt(examens.length / limit)}`
+                                                                        )
+                                                                    }
+                                                                    
+                                                                </strong>
+                                                            ) : (
+                                                                <strong>Page {page} sur {parseInt(examens.length / limit) + 1}</strong>
+                                                            )
+                                                        }
+                                                        <br />
                                                         <div className='sigepec-table'>
                                                             <div className='sigepec-table__header sigepec-table-header'>
                                                                 <div className='sigepec-table__row sigepec-table-row'>
@@ -164,7 +209,10 @@ const Examen = () => {
 
                                                             <div className='sigepec-table__body sigepec-table-body'>
                                                                 {
-                                                                    examens.map((exam, index) => (
+                                                                    examens
+                                                                    .filter(el => el.statut_examen.includes(type))
+                                                                    .slice(debut, fin)
+                                                                    .map((exam, index) => (
                                                                         <div className='sigepec-table__row sigepec-table-row' key={index}>
                                                                             <div className='sigepec-table__column sigepec-table-column sigepec-table-column--xs'>
                                                                                 <strong>{index + 1}</strong>

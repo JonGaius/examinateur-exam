@@ -542,6 +542,14 @@
         background: #f8f8f8;
         border-color: #656565;
     }
+    &.active{
+        background: $color-primary-accent;
+        border-color: $color-primary;
+        &:hover{
+            background: $color-primary-accent;
+            border-color: $color-primary;
+        }
+    }
 }
 .sigepec-button-icon{
     position: relative;
