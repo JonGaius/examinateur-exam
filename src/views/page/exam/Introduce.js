@@ -74,7 +74,6 @@ const Introduce = () => {
                 <div className='sigepec-page-header'>
                     <h1>📖</h1>
                     <h2>Connexion avec l'écran géant </h2>
-                    
                 </div>
                 <div className='sigepec-page-content'>
                     <form onSubmit={establishmentConnection} className="sigepec-page-form">               
