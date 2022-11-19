@@ -90,8 +90,6 @@ const QuestionContainer = ({exam, questIndex, fncQuesion, sujet, socket,examen, 
         }, [musicPath]
     )
 
-
-    
     useEffect(() => {
         timerQuestion()
     }, [timerQuestion])
@@ -112,6 +110,9 @@ const QuestionContainer = ({exam, questIndex, fncQuesion, sujet, socket,examen, 
                         questionIndex: id,
                     }
                     socket.emit("question_suivant", data)
+                    if(document.querySelector(".sigepec-examinateur-composition__image--big")){
+                        document.querySelector(".sigepec-examinateur-composition__image--big").classList.remove("is--show")
+                    }
                 }else{
 
                     let datas = {
@@ -150,8 +151,19 @@ const QuestionContainer = ({exam, questIndex, fncQuesion, sujet, socket,examen, 
             !affiche && !finished ? (
                 <div className='sigepec-examinateur-composition'>
                     <div className='sigepec-examinateur-composition__image'>
-                        <img src={"https://sigepec.hisiastudio.com/" + sujet.questions[questIndex].image_question} alt="question" />
-                        
+                        <img className='main' src={"https://sigepec.hisiastudio.com/" + sujet.questions[questIndex].image_question} alt="question"  onClick={() => {
+                            document.querySelector(".sigepec-examinateur-composition__image--big").classList.add("is--show")
+                        }} />
+                        <button type='button' onClick={() => {
+                            document.querySelector(".sigepec-examinateur-composition__image--big").classList.add("is--show")
+                        }}>
+                            Afficher en grand
+                        </button>
+                        <div className='sigepec-examinateur-composition__image--big' onClick={() => {
+                            document.querySelector(".sigepec-examinateur-composition__image--big").classList.remove("is--show")
+                        }}>
+                            <img src={"https://sigepec.hisiastudio.com/" + sujet.questions[questIndex].image_question} alt="question" />
+                        </div>
                     </div>
                     <div className='sigepec-examinateur-composition__container'>
                         <div className='sigepec-examinateur-composition__intitule sigepec-examinateur-composition-intitule'>
