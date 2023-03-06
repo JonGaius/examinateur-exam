@@ -5,13 +5,14 @@ import NextIcon from '../../../assets/icons/ui/NextIcon';
 import BackIcon from '../../../assets/icons/ui/BackIcon';
 import SadIllustration from '../../../assets/illustrations/SadIllustration';
 import { getMe, reset } from '../../../features/auth/authSlice';
-import { getMyPrograms } from '../../../features/examens/examenSlice';
+import { getMyPrograms, reset as examReset } from '../../../features/examens/examenSlice';
 import { links } from '../../../router/constant';
 import EmptySection from '../../components/container/EmptySection';
 import MainLayout from '../../layout/MainLayout';
 import EmptyIllu from '../../../assets/illustrations/EmptyIllu';
 import EyeIcon from '../../../assets/icons/ui/EyeIcon';
 import CancelIcon from '../../../assets/icons/ui/CancelIcon';
+import {capitalize, modeExamen} from "../../../utils/sharedFunction";
 
 const Examen = () => {
 
@@ -60,7 +61,7 @@ const Examen = () => {
         }))
         return () => {
             dispatch(reset())
-            // dispatch(examReset())
+            dispatch(examReset())
         }
     },[dispatch, examinateur])
 
@@ -87,7 +88,7 @@ const Examen = () => {
                 <div className='sigepec-page'>
                     <div className='sigepec-page__container2'>
                         <div className='sigepec-filedarianne'>
-                            <Link to={links.home}>Accueil</Link> / <span> Liste des examen</span>
+                            <Link to={links.home}>Accueil</Link> / <span> Liste des examens</span>
                         </div>
 
                         <div className='sigepec-page-header2'>
@@ -120,13 +121,15 @@ const Examen = () => {
                                         <div className='sigepec-page-tabContainer'>
                                             <div className='sigepec-page-tabContainer__header sigepec-page-tabContainer-header'>
                                                 {
-                                                    examens && (limit <= examens.length) && (
+                                                    examens && (limit <= examens.filter(el => el.statut_examen !== "en attente")
+                                                    .filter(el => el.statut_examen.toLowerCase().includes(type)).length) && (
                                                         <>
                                                             <div className='sigepec-page-tabContainer-header__pagination'>
                                                                 <button type='button' className={`sigepec-button-icon sigepec-button-icon--normal ${debut < 1 ? "is--disable" : "" }`} onClick={() => prevPage()}>
                                                                     <BackIcon/> <span>Précédent</span>
                                                                 </button>
-                                                                <button type='button' className={`sigepec-button-icon sigepec-button-icon--normal ${fin > examens.length - 1 ? "is--disable" : "" }`} onClick={() => nextPage()}>
+                                                                <button type='button' className={`sigepec-button-icon sigepec-button-icon--normal ${fin > examens.filter(el => el.statut_examen !== "en attente")
+                                                                .filter(el => el.statut_examen.toLowerCase().includes(type)).length - 1 ? "is--disable" : "" }`} onClick={() => nextPage()}>
                                                                     <NextIcon/> <span>Suivant</span>
                                                                 </button>
                                                             </div>
@@ -136,50 +139,61 @@ const Examen = () => {
                                             </div>
 
                                             <div className='sigepec-page-tabContainer-header-tags'>
-                                                    <div className='sigepec-page-tabContainer-header-tags__item'>
-                                                        <button type='button' className={`sigepec-tag ${type === "" ? "active" : ""}`} onClick={() => setType("")}>
-                                                            Tout afficher
-                                                        </button>
-                                                    </div>
-                                                    <div className='sigepec-page-tabContainer-header-tags__item'> 
-                                                    <button type='button' className={`sigepec-tag ${type === "en attente" ? "active" : ""}`} onClick={() => setType("en attente")}>
-                                                            En attente
-                                                        </button>
-                                                    </div>
-                                                    <div className='sigepec-page-tabContainer-header-tags__item'>
-                                                        <button type='button' className={`sigepec-tag ${type === "cloturer" ? "active" : ""}`} onClick={() => setType("cloturer")}>
-                                                            Clôturer
-                                                        </button>
-                                                    </div>
-                                                    <div className='sigepec-page-tabContainer-header-tags__item'>
-                                                        <button type='button' className={`sigepec-tag ${type === "terminer" ? "active" : ""}`} onClick={() => setType("terminer")}>
-                                                            Terminer
-                                                        </button>
-                                                    </div>
-                                                    <div className='sigepec-page-tabContainer-header-tags__item'>
-                                                        <button type='button' className={`sigepec-tag ${type === "annuler" ? "active" : ""}`} onClick={() => setType("annuler")}>
-                                                            Annuler
-                                                        </button>
-                                                    </div>
+                                                <div className='sigepec-page-tabContainer-header-tags__item'>
+                                                    <button type='button' className={`sigepec-tag ${type === "" ? "active" : ""}`} onClick={() => setType("")}>
+                                                        Tout afficher
+                                                    </button>
                                                 </div>
+                                                <div className='sigepec-page-tabContainer-header-tags__item'> 
+                                                    <button type='button' className={`sigepec-tag ${type === "cloturer" ? "active" : ""}`} onClick={() => setType("cloturer")}>
+                                                        En attente
+                                                    </button>
+                                                </div>
+                                                <div className='sigepec-page-tabContainer-header-tags__item'>
+                                                    <button type='button' className={`sigepec-tag ${type === "terminer" ? "active" : ""}`} onClick={() => setType("terminer")}>
+                                                        Terminer
+                                                    </button>
+                                                </div>
+                                                <div className='sigepec-page-tabContainer-header-tags__item'>
+                                                    <button type='button' className={`sigepec-tag ${type === "annuler" ? "active" : ""}`} onClick={() => setType("annuler")}>
+                                                        Annuler
+                                                    </button>
+                                                </div>
+                                            </div>
 
                                             {
-                                                examens && examens.length > 0 ? (
+                                                examens && examens
+                                                .filter(el => el.statut_examen !== "en attente")
+                                                .filter(el => el.statut_examen.toLowerCase().includes(type)).length > 0 ? (
                                                     <div className='sigepec-page-tabContainer__body sigepec-page-tabContainer-body'>
                                                         {
-                                                            parseInt(examens.length / limit) > 0 ? (
+                                                            parseInt(examens
+                                                                .filter(el => el.statut_examen !== "en attente")
+                                                                .filter(el => el.statut_examen.toLowerCase().includes(type))
+                                                                .length / limit) > 0 ? (
                                                                 <strong>
                                                                     {
-                                                                        examens.length % limit > 0 ? (
-                                                                            `Page ${page} sur ${parseInt(examens.length / limit) + 1}`
+                                                                        examens.filter(el => el.statut_examen !== "en attente")
+                                                                        .filter(el => el.statut_examen.toLowerCase().includes(type))
+                                                                        .length % limit > 0 ? (
+                                                                            `Page ${page} sur ${parseInt(examens
+                                                                                .filter(el => el.statut_examen !== "en attente")
+                                                                                .filter(el => el.statut_examen.toLowerCase().includes(type))
+                                                                                .length / limit) + 1}`
                                                                         ) : (
-                                                                            `Page ${page} sur ${parseInt(examens.length / limit)}`
+                                                                            `Page ${page} sur ${parseInt(examens
+                                                                                .filter(el => el.statut_examen !== "en attente")
+                                                                                .filter(el => el.statut_examen.toLowerCase().includes(type))
+                                                                                .length / limit)}`
                                                                         )
                                                                     }
                                                                     
                                                                 </strong>
                                                             ) : (
-                                                                <strong>Page {page} sur {parseInt(examens.length / limit) + 1}</strong>
+                                                                <strong>Page {page} sur {parseInt(examens
+                                                                    .filter(el => el.statut_examen !== "en attente")
+                                                                    .filter(el => el.statut_examen.toLowerCase().includes(type))
+                                                                    .length / limit) + 1}</strong>
                                                             )
                                                         }
                                                         <br />
@@ -210,7 +224,8 @@ const Examen = () => {
                                                             <div className='sigepec-table__body sigepec-table-body'>
                                                                 {
                                                                     examens
-                                                                    .filter(el => el.statut_examen.includes(type))
+                                                                    .filter(el => el.statut_examen !== "en attente")
+                                                                    .filter(el => el.statut_examen.toLowerCase().includes(type))
                                                                     .slice(debut, fin)
                                                                     .map((exam, index) => (
                                                                         <div className='sigepec-table__row sigepec-table-row' key={index}>
@@ -219,8 +234,8 @@ const Examen = () => {
                                                                             </div>
                                                                             <div className='sigepec-table__column sigepec-table-column sigepec-table-column--xm3'>
                                                                                 <p>
-                                                                                    
-                                                                                    <span>{exam.code_examen}</span>  
+                                                                                    <strong>{exam.code_examen}</strong> <br />
+                                                                                    <span>{exam.categorie_permis } - {capitalize(exam.details.langue)} - {modeExamen(exam.details.mode)}</span>
                                                                                 </p>
                                                                             </div>
                                                                             <div className='sigepec-table__column sigepec-table-column sigepec-table-column--xl2'>
@@ -239,7 +254,7 @@ const Examen = () => {
                                                                                 {
                                                                                     exam.statut_examen.toLowerCase() === "cloturer" ? (
                                                                                         <span className='sigepec-chip sigepec-chip--info'>
-                                                                                            Clôturer
+                                                                                            En attente
                                                                                         </span>
                                                                                     ):(
                                                                                         exam.statut_examen.toLowerCase() === "annuler" ? (
@@ -282,7 +297,7 @@ const Examen = () => {
                                                         Aucun examen du code n'a été programmé
                                                     </EmptySection>
                                                 )
-                                            }
+                                            } 
                                         </div>
                                     )
                                 )
@@ -323,10 +338,10 @@ const Examen = () => {
                                     <span>Salle:</span> <strong>{examen.details.salle.nom_salle_code}</strong>
                                 </div>
                                 <div className='sigepec-modal-item'>
-                                    <span>Mode:</span> <strong>{examen.details.mode}</strong>
+                                    <span>Mode:</span> <strong>{modeExamen(examen.details.mode)}</strong>
                                 </div>
                                 <div className='sigepec-modal-item'>
-                                    <span>Langue:</span> <strong>{examen.details.langue}</strong>
+                                    <span>Langue:</span> <strong>{capitalize(examen.details.langue)}</strong>
                                 </div>
                                 <div className='sigepec-modal-item'>
                                     <span>Catégorie:</span> <strong>{examen.categorie_permis}</strong>

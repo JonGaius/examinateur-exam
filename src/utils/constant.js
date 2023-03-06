@@ -1,8 +1,8 @@
 export const APIURL = "https://sigepec.hisiastudio.com/api/v1/"
 export const WEBSOCKETURL = "http://localhost:5000"
+// export const WEBSOCKETURL = "https://sigepec-socket-server.onrender.com/" 
 
-
-export const genreOptions = [
+export const sexeOptions = [
     {
         label: "Homme",
         value: "Homme",

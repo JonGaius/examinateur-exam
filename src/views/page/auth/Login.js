@@ -78,7 +78,8 @@ const Login = () => {
                             {errors}
                         </NoticeForm>
                     )
-                }{
+                }
+                {
                     isError && (
                         <NoticeForm status={"danger"} Icon={DangerIcon} typo={true} title={"Oupss!!"}>
                             {message}
@@ -110,6 +111,7 @@ const Login = () => {
                         Mot de passe
                     </AuthPasswordField>
                 </div>
+                
                 <div className='sigepec-auth-form__action'>
                     <FormButton type={"submit"} mStyle={styleBtn}>
                         {messageBtn}

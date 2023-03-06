@@ -6,11 +6,13 @@ import { getMe, reset } from '../../../features/auth/authSlice';
 import { getSujets } from '../../../features/examens/examenSlice';
 import { links } from '../../../router/constant';
 import EmptySection from '../../components/container/EmptySection';
-import QuestionContainer from '../../components/container/QuestionContainer';
+// import QuestionContainer from '../../components/container/QuestionContainer';
 
 import MainLayout from '../../layout/MainLayout';
 import io from "socket.io-client"
 import { WEBSOCKETURL } from '../../../utils/constant';
+import RenewQuestion from './RenewQuestion';
+
 
 const socket = io.connect(WEBSOCKETURL)
 
@@ -105,8 +107,15 @@ const Composition = () => {
     }
     return (
         <MainLayout title={"Demarrer la composition"} admin={me}>
+           
             <div className='sigepec-page'>
-                {isSujetSuccess && sujets &&  <QuestionContainer exam={state} socket={socket} questIndex={question} fncQuesion={setQuestion} sujet={sujets} examen={state.exam.exam.code_examen} langue={state.exam.exam.details.langue}/>}
+                {isSujetSuccess && sujets && sujets.questions !== "Pas de question" ?  
+                    (<RenewQuestion list={state.list} exam={state} socket={socket} questIndex={question} fncQuesion={setQuestion} sujet={sujets} examen={state.exam.exam.code_examen} langue={state.exam.exam.details.langue}/> )
+                    : (
+                    <EmptySection Illustration={SadIllustration}>
+                    {"Oupss!!! Il y a pas de sujets"}
+                    </EmptySection>
+                )}
             </div>
         </MainLayout>
     );

@@ -69,7 +69,7 @@ const InfoEditForm = ({me, fnc}) => {
                     <Textfield id={"matricule"} type={"text"} dvalue={matricule} fnc={setMatricule} placeholder={"Entrer le numéro matricule"}>
                         Numéro matricule
                     </Textfield>
-                    <Textfield id={"service"} type={"text"} dvalue={service} fnc={setService} placeholder={"Entrer l'agrement de l'auto-école"}>
+                    <Textfield id={"service"} type={"text"} dvalue={service} fnc={setService} placeholder={"Entrer le service"}>
                         Service
                     </Textfield>
                 </div>
@@ -92,7 +92,7 @@ const InfoEditForm = ({me, fnc}) => {
                 </div> */}
                 <div className='sigepec-page-form__action'>
                     <FormButton type={"submit"} mStyle={"primary"}>
-                        Enrégistrer
+                        Enregistrer
                     </FormButton>
                 </div>
             </div>
@@ -132,18 +132,18 @@ const PasswordEditForm = ({me,fnc}) => {
                 <strong>Mot de passe</strong>
                 <div className='sigepec-h-bar'></div>
                 <div className='sigepec-page-form__group'>
+                    <Textfield id={"password"} type={"password"} dvalue={password} fnc={setPassword} placeholder={"Entrer votre ancien mot de passe"}>
+                        Ancien mot de passe
+                    </Textfield>
+                </div>
+                <div className='sigepec-page-form__group'>
                     <Textfield id={"new-password"} type={"password"} dvalue={newPassword} fnc={setNewPassword} placeholder={"Entrer le nouveau mot de passe"}>
-                    Nouveau mot de passe
+                        Nouveau mot de passe
                     </Textfield>
                 </div>
                 <div className='sigepec-page-form__group'>
                     <Textfield id={"confirme-password"} type={"password"} dvalue={confirmPassword} fnc={setConfirmPassword} placeholder={"Confirmer votre nouveau mot de passe"}>
                        Confirmation du nouveau mot de passe
-                    </Textfield>
-                </div>
-                <div className='sigepec-page-form__group'>
-                    <Textfield id={"password"} type={"password"} dvalue={password} fnc={setPassword} placeholder={"Entrer votre ancien mot de passe"}>
-                        Ancien mot de passe
                     </Textfield>
                 </div>
                 
@@ -156,7 +156,7 @@ const PasswordEditForm = ({me,fnc}) => {
                 </div> */}
                 <div className='sigepec-page-form__action'>
                     <FormButton type={"submit"} mStyle={"primary"}>
-                        Enrégistrer
+                        Enregistrer
                     </FormButton>
                 </div>
             </div>

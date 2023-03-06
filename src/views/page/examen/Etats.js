@@ -8,7 +8,7 @@ import EyeIcon from '../../../assets/icons/ui/EyeIcon';
 import EmptyIllu from '../../../assets/illustrations/EmptyIllu';
 import SadIllustration from '../../../assets/illustrations/SadIllustration';
 import { getMe, reset } from '../../../features/auth/authSlice';
-import { getExams } from '../../../features/examens/examenSlice';
+import { getExams, reset as examReset } from '../../../features/examens/examenSlice';
 import { links } from '../../../router/constant';
 import FormButton from '../../components/button/FormButton';
 import EmptySection from '../../components/container/EmptySection';
@@ -16,18 +16,22 @@ import Textfield from '../../components/textfield/Textfield';
 import MainLayout from '../../layout/MainLayout';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import BackIcon from '../../../assets/icons/ui/BackIcon';
+import NextIcon from '../../../assets/icons/ui/NextIcon';
+import image from "../../../assets/images/logos.png"
+import {capitalize, modeExamen} from "../../../utils/sharedFunction";
 
 const Etats = () => {
 
-    // const limit = 10
+    const limit = 10
 
     const [examen, setExamen] = useState("");
     const [dateDebut, setDateDebut] = useState("");
     const [dateFin, setDateFin] = useState("");
 
-    // const [page, setPage] = useState(1)
-    // const [debut, setDebut] = useState(0)
-    // const [fin, setFin] = useState(limit)
+    const [page, setPage] = useState(1)
+    const [debut, setDebut] = useState(0)
+    const [fin, setFin] = useState(limit)
 
     const dispatch = useDispatch()
     const {me, examinateur} = useSelector(
@@ -46,31 +50,34 @@ const Etats = () => {
         }
         dispatch(getExams(data))
     }
-    const generatePDF = () => {
 
-        html2canvas(document.querySelector("#invoice")).then(canvas => {
+    const generatePDF = () => {
+        if(document.querySelector("#resultat")){
+            document.querySelector("#resultat").classList.add("is--show")
+        }
+        html2canvas(document.querySelector("#file-resultat")).then(canvas => {
             document.body.appendChild(canvas);  // if you want see your screenshot in body.
             const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('landscape','pt','a1');
+            const pdf = new jsPDF('portrait','pt','a4');
             pdf.addImage(imgData, 'PNG', 0, 0);
-            pdf.save(`mes-etats-du-${dateDebut}-au-${dateFin}.pdf`); 
-        });
-                
+            pdf.save(`etat-du-${dateDebut}-au-${dateFin}-page-${page}.pdf`); 
+        });        
     }
+
     const {examens, isLoading, isSuccess, isError, message} = useSelector(
         (state) => state.examen
     )
 
-    // const nextPage = () => {
-    //     setDebut(debut + limit)
-    //     setFin(fin + limit)
-    //     setPage(page + 1)
-    // }
-    // const prevPage = () => {
-    //     setPage(page - 1)
-    //     setDebut(debut - limit)
-    //     setFin(fin - limit)
-    // }
+    const nextPage = () => {
+        setDebut(debut + limit)
+        setFin(fin + limit)
+        setPage(page + 1)
+    }
+    const prevPage = () => {
+        setPage(page - 1)
+        setDebut(debut - limit)
+        setFin(fin - limit)
+    }
     
     const removeModal = (id) => {
         document.getElementById(id).classList.remove("is--show");
@@ -85,7 +92,7 @@ const Etats = () => {
        
         return () => {
             dispatch(reset())
-            // dispatch(examReset())
+            dispatch(examReset())
         }
     },[dispatch, examinateur])
 
@@ -179,10 +186,49 @@ const Etats = () => {
                                     ) : (
                                         isSuccess && (
                                             <div className='sigepec-page-tabContainer'>
+
+                                                <div className='sigepec-page-tabContainer__header sigepec-page-tabContainer-header'>
+                                                    {
+                                                        examens && (limit <= examens.length) && (
+                                                            <>
+                                                                <div className='sigepec-page-tabContainer-header__pagination'>
+                                                                    <button type='button' className={`sigepec-button-icon sigepec-button-icon--normal ${debut < 1 ? "is--disable" : "" }`} onClick={() => prevPage()}>
+                                                                        <BackIcon/> <span>Précédent</span>
+                                                                    </button>
+                                                                    <button type='button' className={`sigepec-button-icon sigepec-button-icon--normal ${fin > examens.length - 1 ? "is--disable" : "" }`} onClick={() => nextPage()}>
+                                                                        <NextIcon/> <span>Suivant</span>
+                                                                    </button>
+                                                                </div>
+                                                            </>
+                                                        )
+                                                    }
+                                                </div>
                                               
                                                 {
                                                     examens && examens.length > 0 ? (
                                                         <div className='sigepec-page-tabContainer__body sigepec-page-tabContainer-body'>
+                                                            {
+                                                            parseInt(examens
+                                                                .length / limit) > 0 ? (
+                                                                <strong>
+                                                                    {
+                                                                        examens
+                                                                        .length % limit > 0 ? (
+                                                                            `Page ${page} sur ${parseInt(examens
+                                                                                .length / limit) + 1}`
+                                                                        ) : (
+                                                                            `Page ${page} sur ${parseInt(examens
+                                                                                .length / limit)}`
+                                                                        )
+                                                                    }
+                                                                    
+                                                                </strong>
+                                                            ) : (
+                                                                <strong>Page {page} sur {parseInt(examens
+                                                                    .length / limit) + 1}</strong>
+                                                            )
+                                                        }
+                                                        <br />
                                                             <div className='sigepec-table'>
                                                                 <div className='sigepec-table__header sigepec-table-header'>
                                                                     <div className='sigepec-table__row sigepec-table-row'>
@@ -209,7 +255,9 @@ const Etats = () => {
 
                                                                 <div className='sigepec-table__body sigepec-table-body'>
                                                                     {
-                                                                        examens.map((exam, index) => (
+                                                                        examens
+                                                                        .slice(debut, fin)
+                                                                        .map((exam, index) => (
                                                                             <div className='sigepec-table__row sigepec-table-row' key={index}>
                                                                                 <div className='sigepec-table__column sigepec-table-column sigepec-table-column--xs'>
                                                                                     <strong>{index + 1}</strong>
@@ -255,6 +303,125 @@ const Etats = () => {
                                                         </EmptySection>
                                                     )
                                                 }
+
+                                                <div className='sigepec-export-modal' id='resultat'>
+                                                    <div className='sigepec-export-modal__container'>
+                                                        <div className='sigepec-export-modal__close'>
+                                                            <button type="button" onClick={() => {
+                                                                document.querySelector("#resultat").classList.remove("is--show")
+                                                                document.querySelector("canvas").style.display = "none"
+                                                            }}>
+                                                                <CancelIcon/>
+                                                            </button>
+                                                        </div>
+                                                        <div className='sigepec-export-modal__contain sigepec-export-file sigepec-export-file--a4' id='file-resultat'>
+                                                            <div className='sigepec-export-file__container'>
+                                                                <div className='sigepec-export-file__head'>
+                                                                    <div className='sigepec-export-file__logo'>
+                                                                        <img src={image} alt="sigepec" />
+                                                                    </div>
+                                                                    <div className='sigepec-export-file__head--text'>
+                                                                        <div style={{
+                                                                            width: "100%",
+                                                                        }}>
+                                                                            <p><span>Examinateur:  </span><strong>{me.nom + " " + me.prenom}</strong></p>
+                                                                        </div>
+                                                                        <div>
+                                                                            <p><span>Date de début:  </span><strong>{dateDebut}</strong></p>
+                                                                        </div>
+                                                                        <div>
+                                                                            <p><span>Date de fin:  </span><strong>{dateFin}</strong></p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className='sigepec-export-file-title'>
+                                                                    <h1>Etats</h1>
+                                                                </div>
+                                                                <div className='sigepec-export-file__tabs sigepec-export-file-tabs'>
+                                                                    {
+                                                                        examens && examens.length > 0 ? (
+                                                                            <div className='sigepec-export-file__tabs sigepec-export-file-tabs'>
+                                                                                {parseInt(examens.length / limit) > 0 ? (
+                                                                                        <strong>
+                                                                                            {
+                                                                                                examens
+                                                                                                .length % limit > 0 ? (
+                                                                                                    `Page ${page} sur ${parseInt(examens
+                                                                                                        .length / limit) + 1}`
+                                                                                                ) : (
+                                                                                                    `Page ${page} sur ${parseInt(examens
+                                                                                                        .length / limit)}`
+                                                                                                )
+                                                                                            }
+                                                                                            
+                                                                                        </strong>
+                                                                                    ) : (
+                                                                                        <strong>Page {page} sur {parseInt(examens.length / limit) + 1}</strong>
+                                                                                    )
+                                                                                }
+                                                 
+                                                                                <div className='sigepec-export-file-tabs__head'>
+                                                                                    <div className='sigepec-export-file-tabs__row'>
+                                                                                        <div className='sigepec-export-file-tabs__col sigepec-export-file-tabs__col--lil'>
+                                                                                            <strong>#</strong>
+                                                                                        </div>
+                                                                                        <div className='sigepec-export-file-tabs__col sigepec-export-file-tabs__col--mid'>
+                                                                                            <strong>Code examen</strong>
+                                                                                        </div>
+                                                                                        <div className='sigepec-export-file-tabs__col sigepec-export-file-tabs__col--mid'>
+                                                                                            <strong>Lieu et Salle</strong>
+                                                                                        </div>
+                                                                                        <div className='sigepec-export-file-tabs__col sigepec-export-file-tabs__col--mid'>
+                                                                                            <strong>Date et Heure</strong>
+                                                                                        </div>
+                                                                                        <div className='sigepec-export-file-tabs__col sigepec-export-file-tabs__col--mid'>
+                                                                                            <strong>Nombre de candidat</strong>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div className='sigepec-export-file-tabs__body'>
+                                                                                    {
+                                                                                        examens
+                                                                                        .slice(debut, fin)
+                                                                                        .map((exam, index) => (
+                                                                                            <div className='sigepec-export-file-tabs__row' key={index}>
+                                                                                                <div className='sigepec-export-file-tabs__col sigepec-export-file-tabs__col--lil'>
+                                                                                                    <strong>{index + 1}</strong>
+                                                                                                </div>
+                                                                                                <div className='sigepec-export-file-tabs__col sigepec-export-file-tabs__col--mid'>
+                                                                                                    <span>{exam.code_examen}</span>
+                                                                                                </div>
+                                                                                                <div className='sigepec-export-file-tabs__col sigepec-export-file-tabs__col--mid'>
+                                                                                                    <p>
+                                                                                                        <span>{exam.lieu}</span> <br />
+                                                                                                        <strong>{exam.details.salle.nom_salle_code}</strong>  
+                                                                                                    </p>
+                                                                                                </div>
+                                                                                                <div className='sigepec-export-file-tabs__col sigepec-export-file-tabs__col--mid'>
+                                                                                                    <p>
+                                                                                                        <strong>Date: {exam.date_examen}</strong> <br />
+                                                                                                        <span>Heure: {exam.heure_examen}</span>  
+                                                                                                    </p>
+                                                                                                </div>
+                                                                                                <div className='sigepec-export-file-tabs__col sigepec-export-file-tabs__col--mid'>
+                                                                                                    <strong>{exam.nombre_de_candidat}</strong>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        ))
+                                                                                    }
+                                                                                </div>
+                                                                            </div>
+                                                                        ) : (
+                                                                            <EmptySection Illustration={EmptyIllu}>
+                                                                                Aucun examen
+                                                                            </EmptySection>
+                                                                        )
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         )
                                     )
@@ -325,10 +492,10 @@ const Etats = () => {
                                         <span>Salle:</span> <strong>{examen.details.salle.nom_salle_code}</strong>
                                     </div>
                                     <div className='sigepec-modal-item'>
-                                        <span>Mode:</span> <strong>{examen.details.mode}</strong>
+                                        <span>Mode:</span> <strong>{modeExamen(examen.details.mode)}</strong>
                                     </div>
                                     <div className='sigepec-modal-item'>
-                                        <span>Langue:</span> <strong>{examen.details.langue}</strong>
+                                        <span>Langue:</span> <strong>{capitalize(examen.details.langue)}</strong>
                                     </div>
                                     <div className='sigepec-modal-item'>
                                         <span>Catégorie:</span> <strong>{examen.categorie_permis}</strong>

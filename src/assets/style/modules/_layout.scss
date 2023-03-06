@@ -340,9 +340,10 @@
         position: relative;
         width: 50px;
         height: 55px;
-        background: #656565;
+        background: #e2e2e2;
         border-radius: 2px;
         overflow: hidden;
+        @extend %flex-center;
         img{
             @extend %image-center;
         }
@@ -579,7 +580,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
-        margin-bottom: 50px;
+        margin-bottom: 10px;
         &__actions{
             position: relative;
             display: flex;
@@ -720,7 +721,6 @@
     @extend %flex-center;
     padding: 10px;
 }
-
 .sigepec-error-section{
     position: relative;
     width: 100%;
@@ -865,7 +865,7 @@
             row-gap: 10px;
             margin-bottom: 50px;
             svg{
-                width: 20vh;
+                width: 10vh;
             }
             strong{
                 font-size: 18pt;
@@ -914,4 +914,134 @@
     &__action{
         margin-top: -50px;
     }
+}
+
+.sigepec-export-modal{
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: rgba($color: #000000, $alpha: .25);
+    z-index: 999;
+    display: none;
+    overflow: auto;
+    &.is--show{
+        display: block;
+    }
+    &__container{
+        position: relative;
+        width: 100%;
+        max-width: calc(2480px / 6);
+        height: calc(3508px / 6);
+        background: #ffffff;
+        margin: 2vh auto auto;
+        padding: 5px 10px;
+        overflow-y: auto;
+    }
+    &__close{
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 9;
+        button{
+            cursor: pointer;
+            background: #ffffff;
+            padding: 10px;
+            border-radius: 5px;
+            width: 50px;
+            height: 50px;
+            svg{
+                width: 30px;
+                height: 30px;
+            }
+        }
+    }
+}
+.sigepec-export-file{
+    position: relative;
+    width: 100%;
+    padding: 25px 15px;
+    font-size: 9pt;
+    p, span, strong{
+        font-size: 12pt;
+    }
+    &__container{
+        position: relative;
+        width: 100%;
+    }
+    &__logo{
+        height: 30px;
+        img{
+            @extend %image-width-auto;
+        }
+    }
+    &__head--text{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        row-gap: 10px;
+        div{
+            width: 50%;
+            p, span, strong{
+                font-size: 8pt;
+            }
+        }
+    }
+}
+.sigepec-export-file-tabs{
+    position: relative;
+    width: 100%;
+    margin-top: 5px;
+    p, span, strong{
+        font-size: 6pt;
+    }
+
+    &__row{
+        align-items: center;
+        position: relative;
+        height: auto;
+        border-bottom: 0.5px solid #d2d2d2;
+
+        display: flex;
+        justify-content: space-between;
+
+    }
+    &__col{
+        position: relative;
+        height: auto;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        width: auto;
+        padding: 5px 0px;
+        p, span, strong{
+            font-size: 6pt;
+        }
+
+        &--lil{
+            position: relative;
+            width: 30px;
+        }
+        &--mid{
+            position: relative;
+            width: calc((100% - 30px) / 4);
+        }
+        &--large{
+            position: relative;
+            width: calc(100% - ((100% - 30px) / 3));
+            padding-left: 10px;
+        }
+    }
+}
+.sigepec-export-file-title{
+    margin-top: 20px;
+    text-align: left;
+    h1{
+        font-size: 14pt;
+    }
+}
+
+canvas{
+    display: none;
 }

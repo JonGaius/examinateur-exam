@@ -21,6 +21,7 @@ const getSujets = async (data, token) => {
     // }
     
     const response = await axios.post(APIURL + `gestion_examen/sujets/get_sujet_examen/`, data)
+    
     if(response.data && response.data.sujet){
         let obj = {
             question: response.data.sujet.questions_choisies
@@ -78,7 +79,7 @@ const updateExam = async (data, token) => {
     // }
     
     const response = await axios.patch(APIURL + `gestion_examen/examens/${data.id}/`, data.content)
-    
+    console.log(response)
     return response.data
 }
 const examenService = {

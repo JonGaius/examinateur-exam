@@ -56,3 +56,11 @@ export const toArray = (string, separator = ";") => {
     let tabs = string.split(separator)
     return tabs.filter(el => el !== " " || el !== null)
 }
+
+export const modeExamen = (mode) => {
+    let text = capitalize(mode)
+    if(mode.toLowerCase() === "telephone"){
+        text = "Téléphone"
+    }
+    return text
+}

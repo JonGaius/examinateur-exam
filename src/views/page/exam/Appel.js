@@ -47,23 +47,56 @@ const Appel = () => {
         },[state]
     )
 
+
     useEffect(() => {
         join_room()
     },[join_room])
 
-    const checkCandidantIn = (id, statut) => {
-        if(id){
+    const send_to_tv = useCallback(
+        () => {
+            if(state){
+                let data = {
+                    room: state.codeTV,
+                    etape: "appel",
+                    resultat: state.exam
+                }
+                // console.log(room.split(","))
+                socket.emit("send_to_tv", data)
+            }
+        },[state]
+    )
+
+    useEffect(() => {
+        send_to_tv()
+    },[send_to_tv])
+    
+    useEffect(() => {
+
+        const data = {
+            room: state.codeTV,
+            salle: state.salle,
+            examen: state.exam.code_examen,
+            exam: state.exam,
+            encours: true
+        }
+        socket.emit("debut_examen", data)
+
+    },[state])
+
+    const checkCandidantIn = (user, statut) => {
+        if(user){
 
             let candidat = {
-                candidat_id: parseInt(id),
+                candidat_id: user.id,
+                candidat_numero: user.programmation_candidat.candidat.id,
                 presence: statut
             }
 
             if(list.length > 0){
-                let existance = list.filter(el => el.candidat_id === id)
+                let existance = list.filter(el => el.candidat_id === user.id)
 
                 if(existance && existance.length > 0){
-                    let taba = list.filter(el => el.candidat_id !== id)
+                    let taba = list.filter(el => el.candidat_id !== user.id)
                     taba = [...taba, candidat]
                     setList(taba)
                 }else{
@@ -93,6 +126,7 @@ const Appel = () => {
             const data = {
                 room: state.codeTV,
                 salle: state.salle,
+                examen: state.exam.code_examen,
                 finish: true
             }
             socket.emit("checkin", data)
@@ -178,64 +212,63 @@ const Appel = () => {
                             {
                                 state && state.exam.candidatexamen_set && state.exam.candidatexamen_set.length > 0 ? (
                                     (
-                                            state.exam.candidatexamen_set.map((candidat, index) => (
-                                                <div className='sigepec-page-form-table__row' key={index}>
-                                                    <div className='sigepec-page-form-table__col col-1'>
-                                                        <strong>{candidat.programmation_candidat.candidat.id}</strong>
-                                                    </div>
-                                                    <div className='sigepec-page-form-table__col col-auto'>
-                                                        <div className='sigepec-page-form-table__item'>
-                                                            <div className='sigepec-page-form-table__avatar'>
-                                                                {
-                                                                    candidat.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "photo-identite")[0] ? (
-                                                                        <img src={"https://sigepec.hisiastudio.com/"+candidat.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "photo-identite")[0].url_fichier} alt="avatar" />
-                                                                    ) : (
-                                                                        <UserIcon/>
-                                                                    )
-                                                                }
-                                                            </div>
-                                                            <div className='sigepec-page-form-table__info'>
-                                                                <span>{candidat.programmation_candidat.candidat.dossier.numero_dossier} </span><br />
-                                                                <strong>{candidat.programmation_candidat.candidat.dossier.info_id.nom} {candidat.programmation_candidat.candidat.dossier.info_id.nom_de_jeune_fille ? ` née ${candidat.programmation_candidat.candidat.dossier.info_id.nom_de_jeune_fille}` : ""} {" "+candidat.programmation_candidat.candidat.dossier.info_id.prenom}</strong> <br />
-                                                                <span>Auto Ecole: {candidat.programmation_candidat.candidat.dossier.auto_ecole.nom_autoecole}</span>
-                                                            </div>
+                                        state.exam.candidatexamen_set.map((candidat, index) => (
+                                            <div className='sigepec-page-form-table__row' key={index}>
+                                                <div className='sigepec-page-form-table__col col-1'>
+                                                    <strong>{candidat.programmation_candidat.candidat.id}</strong>
+                                                </div>
+                                                <div className='sigepec-page-form-table__col col-auto'>
+                                                    <div className='sigepec-page-form-table__item'>
+                                                        <div className='sigepec-page-form-table__avatar'>
+                                                            {
+                                                                candidat.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "Photo d'identité")[0] ? (
+                                                                    <img src={"https://sigepec.hisiastudio.com/"+candidat.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "Photo d'identité")[0].url_fichier} alt="avatar" />
+                                                                ) : (
+                                                                    <UserIcon/>
+                                                                )
+                                                            }
+                                                        </div>
+                                                        <div className='sigepec-page-form-table__info'>
+                                                            <span>{candidat.programmation_candidat.candidat.dossier.numero_dossier} </span><br />
+                                                            <strong>{candidat.programmation_candidat.candidat.dossier.info_id.nom} {candidat.programmation_candidat.candidat.dossier.info_id.nom_de_jeune_fille ? ` née ${candidat.programmation_candidat.candidat.dossier.info_id.nom_de_jeune_fille}` : ""} {" "+candidat.programmation_candidat.candidat.dossier.info_id.prenom}</strong> <br />
+                                                            <span>Auto Ecole: {candidat.programmation_candidat.candidat.dossier.auto_ecole.nom_autoecole}</span>
                                                         </div>
                                                     </div>
-                                                    <div className='sigepec-page-form-table__col col-mid'>
-                                                        {   
-                                                            list.length > 0 && list.filter(el => el.candidat_id === candidat.id).length > 0? (
-    
-                                                                list.filter(el => el.candidat_id === candidat.id)[0].presence ? (
-    
-                                                                    <span className='sigepec-chip sigepec-chip--success'>
-                                                                        Présent
-                                                                    </span>
-                                                                ) : (
-    
-                                                                    <span className='sigepec-chip sigepec-chip--danger'>
-                                                                        Absent
-                                                                    </span>
-                                                                )
+                                                </div>
+                                                <div className='sigepec-page-form-table__col col-mid'>
+                                                    {   
+                                                        list.length > 0 && list.filter(el => el.candidat_id === candidat.id).length > 0? (
+
+                                                            list.filter(el => el.candidat_id === candidat.id)[0].presence ? (
+
+                                                                <span className='sigepec-chip sigepec-chip--success'>
+                                                                    Présent
+                                                                </span>
                                                             ) : (
-                                                                <span className='sigepec-chip'>
-                                                                    -
+
+                                                                <span className='sigepec-chip sigepec-chip--danger'>
+                                                                    Absent
                                                                 </span>
                                                             )
-                                                        }
-                                                        
-                                                    </div>
-                                                    <div className='sigepec-page-form-table__col col-actions'>
-                                                        <button type='button' className='sigepec-button-icon sigepec-button-icon--normal' onClick={() => showModal("show-modal", candidat)} >
-                                                            <EyeIcon/> <span>Editer</span>
-                                                        </button>
-                                                    </div>
+                                                        ) : (
+                                                            <span className='sigepec-chip'>
+                                                                -
+                                                            </span>
+                                                        )
+                                                    }
+                                                    
                                                 </div>
-                                            ))
-                                        )
+                                                <div className='sigepec-page-form-table__col col-actions'>
+                                                    <button type='button' className='sigepec-button-icon sigepec-button-icon--normal' onClick={() => showModal("show-modal", candidat)} >
+                                                        <EyeIcon/> <span>Editer</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))
+                                    )
                                     ) : (
                                         <strong>Aucun candidat programmé</strong>
                                     )
-                                
                             }
                         </div>
                     </form>
@@ -258,8 +291,8 @@ const Appel = () => {
                                     <div className='sigepec-modal__user sigepec-modal-user'>
                                         <div className='sigepec-modal-user__image'>
                                         {
-                                            user.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "photo-identite")[0] ? (
-                                                <img src={"https://sigepec.hisiastudio.com/"+user.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "photo-identite")[0].url_fichier} alt="avatar" />
+                                            user.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "Photo d'identité")[0] ? (
+                                                <img src={"https://sigepec.hisiastudio.com/"+user.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "Photo d'identité")[0].url_fichier} alt="avatar" />
                                             ) : (
                                                 <UserIcon/>
                                             )
@@ -275,12 +308,12 @@ const Appel = () => {
                                 </div>
                                 <div className='sigepec-modal__footer sigepec-modal-footer'>
                                     <div className='sigepec-modal-footer__action'>
-                                        <button type='button' className='sigepec-button sigepec-button--secondary' onClick={() => checkCandidantIn(user.id, false)}>
+                                        <button type='button' className='sigepec-button sigepec-button--secondary' onClick={() => checkCandidantIn(user, false)}>
                                            Absent
                                         </button>
                                     </div>
                                     <div className='sigepec-modal-footer__action'>
-                                        <button type='button' className='sigepec-button sigepec-button--success' onClick={() => checkCandidantIn(user.id, true)}>
+                                        <button type='button' className='sigepec-button sigepec-button--success' onClick={() => checkCandidantIn(user, true)}>
                                             Présent
                                         </button>
                                     </div>

@@ -693,9 +693,14 @@
         position: relative;
         width: 170px;
         height: 180px;
-        background: #656565;
-        border-radius: 5px;
+        background: #fff3f3;
+        border-radius: 16px;
         overflow: hidden;
+        @extend %flex-center;
+        svg{
+            width: 60px;
+            height: 60px;
+        }
         img{
             @extend %image-center;
         }

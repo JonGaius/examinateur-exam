@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {useLocation, useNavigate} from "react-router-dom"
 import DangerIcon from '../../../assets/icons/ui/DangerIcon';
@@ -11,9 +11,14 @@ import NoticeForm from '../../components/card/NoticeForm';
 import EmptySection from '../../components/container/EmptySection';
 import MainLayout from '../../layout/MainLayout';
 
+import io from "socket.io-client"
+import { WEBSOCKETURL } from '../../../utils/constant';
+
+const socket = io.connect(WEBSOCKETURL)
+
 const Finish = () => {
     const {state} =  useLocation()
-
+    console.log(state)
     let navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -35,6 +40,37 @@ const Finish = () => {
         }
         dispatch(updateExam(data))
     }
+
+    const send_to_tv = useCallback(
+        () => {
+            if(isSuccess && state){
+                let data = {
+                    room: state.exam.codeTV,
+                    etape: "resultat",
+                    resultat: examen
+
+                }
+                // console.log(room.split(","))
+                socket.emit("send_to_tv", data)
+            }
+
+            if(isEditSuccess && state){
+                let data = {
+                    room: state.exam.codeTV,
+                    etape: "finish",
+                    codeExamen: state.exam.exam.code_examen
+                }
+                // console.log(room.split(","))
+                socket.emit("send_to_tv", data)
+            }
+        },[state, isSuccess, isEditSuccess, examen]
+    )
+
+
+    useEffect(() => {
+        send_to_tv()
+    },[send_to_tv])
+
     useEffect(() => {
         if(!state){
             navigate(links.home)
@@ -115,8 +151,8 @@ const Finish = () => {
                                                 <div className='sigepec-page-form-table__item'>
                                                     <div className='sigepec-page-form-table__avatar'>
                                                         {
-                                                            candidat.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "photo-identite")[0] ? (
-                                                                <img src={"https://sigepec.hisiastudio.com/"+candidat.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "photo-identite")[0].url_fichier} alt="avatar" />
+                                                            candidat.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "Photo d'identité")[0] ? (
+                                                                <img src={"https://sigepec.hisiastudio.com/"+candidat.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "Photo d'identité")[0].url_fichier} alt="avatar" />
                                                             ) : (
                                                                 <UserIcon/>
                                                             )
@@ -133,12 +169,12 @@ const Finish = () => {
                                                 {
                                                     candidat.score < 25 ? (
                                                         <span className='sigepec-chip sigepec-chip--danger'>
-                                                            Ajourné
+                                                            Ajourné(e)
                                                         </span>
 
                                                     ) : (
                                                         <span className='sigepec-chip sigepec-chip--success'>
-                                                            Admin
+                                                            Admis(e)
                                                         </span>
 
                                                     )

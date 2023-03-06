@@ -128,7 +128,7 @@ export const getExams = createAsyncThunk(
 )
 
 export const examenSlice = createSlice({
-    name: 'auth',
+    name: 'examen',
     initialState,
     reducers: {
       reset: (state) => {
