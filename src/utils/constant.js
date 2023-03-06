@@ -1,6 +1,10 @@
-export const APIURL = "https://sigepec.hisiastudio.com/api/v1/"
-export const WEBSOCKETURL = "http://localhost:5000"
+//export const APIURL = "https://sigepec.hisiastudio.com/api/v1/"
+//export const WEBSOCKETURL = "http://localhost:5000"
+
 // export const WEBSOCKETURL = "https://sigepec-socket-server.onrender.com/" 
+
+export const APIURL = "http://sigepec.com:8010/api/v1/"
+export const WEBSOCKETURL = "http://sigepec.com:5000/"
 
 export const sexeOptions = [
     {
