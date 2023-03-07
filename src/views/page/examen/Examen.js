@@ -121,8 +121,8 @@ const Examen = () => {
                                         <div className='sigepec-page-tabContainer'>
                                             <div className='sigepec-page-tabContainer__header sigepec-page-tabContainer-header'>
                                                 {
-                                                    examens && (limit <= examens.filter(el => el.statut_examen !== "en attente")
-                                                    .filter(el => el.statut_examen.toLowerCase().includes(type)).length) && (
+                                                    examens && (limit <= [...examens].filter(el => el.statut_examen !== "en attente")
+                                                    .filter(el => el.statut_examen && el.statut_examen.toLowerCase().includes(type)).length) && (
                                                         <>
                                                             <div className='sigepec-page-tabContainer-header__pagination'>
                                                                 <button type='button' className={`sigepec-button-icon sigepec-button-icon--normal ${debut < 1 ? "is--disable" : "" }`} onClick={() => prevPage()}>
@@ -223,7 +223,7 @@ const Examen = () => {
 
                                                             <div className='sigepec-table__body sigepec-table-body'>
                                                                 {
-                                                                    examens
+                                                                    [...examens]
                                                                     .filter(el => el.statut_examen !== "en attente")
                                                                     .filter(el => el.statut_examen.toLowerCase().includes(type))
                                                                     .slice(debut, fin)
@@ -235,13 +235,13 @@ const Examen = () => {
                                                                             <div className='sigepec-table__column sigepec-table-column sigepec-table-column--xm3'>
                                                                                 <p>
                                                                                     <strong>{exam.code_examen}</strong> <br />
-                                                                                    <span>{exam.categorie_permis } - {capitalize(exam.details.langue)} - {modeExamen(exam.details.mode)}</span>
+                                                                                    <span>{exam.categorie_permis } - {exam.details && exam.details.langue && capitalize(exam.details.langue)} - {exam.details && exam.details.mode && modeExamen(exam.details.mode)}</span>
                                                                                 </p>
                                                                             </div>
                                                                             <div className='sigepec-table__column sigepec-table-column sigepec-table-column--xl2'>
                                                                                 <p>
                                                                                     <span>{exam.lieu}</span> <br />
-                                                                                    <strong>{exam.details.salle.nom_salle_code}</strong>  
+                                                                                    <strong>{exam.details && exam.details.salle && exam.details.salle.nom_salle_code}</strong>
                                                                                 </p>
                                                                             </div>
                                                                             <div className='sigepec-table__column sigepec-table-column sigepec-table-column--xm'>
