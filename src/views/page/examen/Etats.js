@@ -205,7 +205,7 @@ const Etats = () => {
                                                 </div>
                                               
                                                 {
-                                                    examens && examens.length > 0 ? (
+                                                    [...examens] && [...examens].length > 0 ? (
                                                         <div className='sigepec-page-tabContainer__body sigepec-page-tabContainer-body'>
                                                             {
                                                             parseInt(examens
@@ -271,7 +271,7 @@ const Etats = () => {
                                                                                 <div className='sigepec-table__column sigepec-table-column sigepec-table-column--xl2'>
                                                                                     <p>
                                                                                         <span>{exam.lieu}</span> <br />
-                                                                                        <strong>{exam.details.salle.nom_salle_code}</strong>  
+                                                                                        <strong>{exam.details && exam.details.salle.nom_salle_code}</strong>
                                                                                     </p>
                                                                                 </div>
                                                                                 <div className='sigepec-table__column sigepec-table-column sigepec-table-column--xm'>
@@ -339,7 +339,7 @@ const Etats = () => {
                                                                 </div>
                                                                 <div className='sigepec-export-file__tabs sigepec-export-file-tabs'>
                                                                     {
-                                                                        examens && examens.length > 0 ? (
+                                                                        [...examens] && [...examens].length > 0 ? (
                                                                             <div className='sigepec-export-file__tabs sigepec-export-file-tabs'>
                                                                                 {parseInt(examens.length / limit) > 0 ? (
                                                                                         <strong>
@@ -381,7 +381,7 @@ const Etats = () => {
                                                                                 </div>
                                                                                 <div className='sigepec-export-file-tabs__body'>
                                                                                     {
-                                                                                        examens
+                                                                                        [...examens]
                                                                                         .slice(debut, fin)
                                                                                         .map((exam, index) => (
                                                                                             <div className='sigepec-export-file-tabs__row' key={index}>
@@ -394,7 +394,7 @@ const Etats = () => {
                                                                                                 <div className='sigepec-export-file-tabs__col sigepec-export-file-tabs__col--mid'>
                                                                                                     <p>
                                                                                                         <span>{exam.lieu}</span> <br />
-                                                                                                        <strong>{exam.details.salle.nom_salle_code}</strong>  
+                                                                                                        <strong>{exam.details && exam.details.salle && exam.details.salle.nom_salle_code}</strong>
                                                                                                     </p>
                                                                                                 </div>
                                                                                                 <div className='sigepec-export-file-tabs__col sigepec-export-file-tabs__col--mid'>
@@ -447,7 +447,7 @@ const Etats = () => {
                         {
                             examen && (
                                 <>
-                                {
+                                    {
                                         examen.statut_examen.toLowerCase() === "cloturer" ? (
                                             <span className='sigepec-chip sigepec-chip--info'>
                                                 Clôturer
@@ -489,13 +489,13 @@ const Etats = () => {
                                         <span>Lieu:</span> <strong>{examen.lieu}</strong>
                                     </div>
                                     <div className='sigepec-modal-item'>
-                                        <span>Salle:</span> <strong>{examen.details.salle.nom_salle_code}</strong>
+                                        <span>Salle:</span> <strong>{examen.details && examen.details.salle && examen.details.salle.nom_salle_code}</strong>
                                     </div>
                                     <div className='sigepec-modal-item'>
-                                        <span>Mode:</span> <strong>{modeExamen(examen.details.mode)}</strong>
+                                        <span>Mode:</span> <strong>{examen.details && modeExamen(examen.details.mode)}</strong>
                                     </div>
                                     <div className='sigepec-modal-item'>
-                                        <span>Langue:</span> <strong>{capitalize(examen.details.langue)}</strong>
+                                        <span>Langue:</span> <strong>{examen.details && capitalize(examen.details.langue)}</strong>
                                     </div>
                                     <div className='sigepec-modal-item'>
                                         <span>Catégorie:</span> <strong>{examen.categorie_permis}</strong>
