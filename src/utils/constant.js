@@ -5,6 +5,7 @@
 
 export const APIURL = "http://sigepec.com:8010/api/v1/"
 export const WEBSOCKETURL = "http://sigepec.com:5000/"
+export const URLIMAGE = "http://sigepec.com:8010/"
 
 export const sexeOptions = [
     {
