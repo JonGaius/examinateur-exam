@@ -222,7 +222,7 @@ const Appel = () => {
                                                         <div className='sigepec-page-form-table__avatar'>
                                                             {
                                                                 candidat.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "Photo d'identité")[0] ? (
-                                                                    <img src={"https://sigepec.hisiastudio.com/"+candidat.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "Photo d'identité")[0].url_fichier} alt="avatar" />
+                                                                    <img src={URLIMAGE+candidat.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "Photo d'identité")[0].url_fichier} alt="avatar" />
                                                                 ) : (
                                                                     <UserIcon/>
                                                                 )
@@ -292,7 +292,7 @@ const Appel = () => {
                                         <div className='sigepec-modal-user__image'>
                                         {
                                             user.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "Photo d'identité")[0] ? (
-                                                <img src={"https://sigepec.hisiastudio.com/"+user.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "Photo d'identité")[0].url_fichier} alt="avatar" />
+                                                <img src={URLIMAGE+user.programmation_candidat.candidat.dossier.fichiers.filter(el => el.type_de_fichier === "Photo d'identité")[0].url_fichier} alt="avatar" />
                                             ) : (
                                                 <UserIcon/>
                                             )
