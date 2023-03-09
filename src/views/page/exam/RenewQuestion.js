@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { links } from '../../../router/constant';
 import { toArray } from '../../../utils/sharedFunction';
+import {URLIMAGE} from "../../../utils/constant";
 
 const finished = JSON.parse(localStorage.getItem('finish-exam'));
 
@@ -36,18 +37,18 @@ const RenewQuestion = ({exam, questIndex, fncQuesion, sujet, socket, examen, lan
         () => {
             switch (langue) {
                 case "français":
-                    setMusiPath("https://sigepec.hisiastudio.com/"+sujet.questions[questIndex].audio_fr)
+                    setMusiPath(URLIMAGE+sujet.questions[questIndex].audio_fr)
                     break;
                 case "mooré":
-                    setMusiPath("https://sigepec.hisiastudio.com/"+sujet.questions[questIndex].audio_moore)
+                    setMusiPath(URLIMAGE+sujet.questions[questIndex].audio_moore)
                     break;
 
                 case "dioula":
-                    setMusiPath("https://sigepec.hisiastudio.com/"+sujet.questions[questIndex].audio_dioula)
+                    setMusiPath(URLIMAGE+sujet.questions[questIndex].audio_dioula)
                     break;
         
                 case "fulfuldé":
-                    setMusiPath("https://sigepec.hisiastudio.com/"+sujet.questions[questIndex].audio_fulfulde)
+                    setMusiPath(URLIMAGE+"sujet.questions[questIndex].audio_fulfulde")
                     break;
                         
                 default:
@@ -116,7 +117,7 @@ const RenewQuestion = ({exam, questIndex, fncQuesion, sujet, socket, examen, lan
 
                     <div className='sigepec-examinateur-composition'>
                         <div className='sigepec-examinateur-composition__image'>
-                            <img className='main' src={"https://sigepec.hisiastudio.com/"+sujet.questions[questIndex].image_question} alt="question" />
+                            <img className='main' src={URLIMAGE+sujet.questions[questIndex].image_question} alt="question" />
                             {/* <button type='button' onClick={() => {
                                 document.querySelector(".sigepec-examinateur-composition__image--big").classList.add("is--show")
                             }}>
