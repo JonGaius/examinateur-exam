@@ -162,26 +162,26 @@ const Examen = () => {
                                             </div>
 
                                             {
-                                                examens && examens
+                                                examens && [...examens]
                                                 .filter(el => el.statut_examen !== "en attente")
                                                 .filter(el => el.statut_examen.toLowerCase().includes(type)).length > 0 ? (
                                                     <div className='sigepec-page-tabContainer__body sigepec-page-tabContainer-body'>
                                                         {
-                                                            parseInt(examens
+                                                            parseInt([...examens]
                                                                 .filter(el => el.statut_examen !== "en attente")
                                                                 .filter(el => el.statut_examen.toLowerCase().includes(type))
                                                                 .length / limit) > 0 ? (
                                                                 <strong>
                                                                     {
-                                                                        examens.filter(el => el.statut_examen !== "en attente")
+                                                                        [...examens].filter(el => el.statut_examen !== "en attente")
                                                                         .filter(el => el.statut_examen.toLowerCase().includes(type))
                                                                         .length % limit > 0 ? (
-                                                                            `Page ${page} sur ${parseInt(examens
+                                                                            `Page ${page} sur ${parseInt([...examens]
                                                                                 .filter(el => el.statut_examen !== "en attente")
                                                                                 .filter(el => el.statut_examen.toLowerCase().includes(type))
                                                                                 .length / limit) + 1}`
                                                                         ) : (
-                                                                            `Page ${page} sur ${parseInt(examens
+                                                                            `Page ${page} sur ${parseInt([...examens]
                                                                                 .filter(el => el.statut_examen !== "en attente")
                                                                                 .filter(el => el.statut_examen.toLowerCase().includes(type))
                                                                                 .length / limit)}`
@@ -190,7 +190,7 @@ const Examen = () => {
                                                                     
                                                                 </strong>
                                                             ) : (
-                                                                <strong>Page {page} sur {parseInt(examens
+                                                                <strong>Page {page} sur {parseInt([...examens]
                                                                     .filter(el => el.statut_examen !== "en attente")
                                                                     .filter(el => el.statut_examen.toLowerCase().includes(type))
                                                                     .length / limit) + 1}</strong>
