@@ -11,7 +11,7 @@ import FormButton from '../../components/button/FormButton';
 import EmptySection from '../../components/container/EmptySection';
 import MainLayout from '../../layout/MainLayout';
 import io from "socket.io-client"
-import { WEBSOCKETURL } from '../../../utils/constant';
+import {URLIMAGE, WEBSOCKETURL} from '../../../utils/constant';
 import NoticeForm from '../../components/card/NoticeForm';
 import DangerIcon from '../../../assets/icons/ui/DangerIcon';
 
