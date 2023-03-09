@@ -24,6 +24,7 @@ const Test = () => {
     let navigate = useNavigate()
     const dispatch = useDispatch()
     const [musicIPath, setMusicIPath] = useState("")
+    const [playMusic, setPlayMusic] = useState(true)
     const {me, isLoading, isError, message} = useSelector(
         (state) => state.auth
     )
@@ -88,8 +89,13 @@ const Test = () => {
 
     useEffect(() => {
         const music = new Audio(musicIPath);
-        music.play();
-    },[musicIPath])
+        if(playMusic){
+            music.play();
+            setPlayMusic(!playMusic)
+        }else{
+            music.pause()
+        }
+    },[musicIPath, playMusic])
 
     if(isLoading){
         return (
@@ -108,6 +114,17 @@ const Test = () => {
     return (
         <MainLayout title={"Demarrer la composition"} admin={me}>
             <div className='sigepec-page'>
+                <div className={"sigepec-page-play"}>
+                    <button className={"sigepec-button"} type={"button"} onClick={() => {setPlayMusic(!playMusic)}}>
+                        {
+                            playMusic ? (
+                                "Mettre en pause"
+                            ) : (
+                                "Lancer l'audio introductive"
+                            )
+                        }
+                    </button>
+                </div>
                 <div className='sigepec-page-header'>
                     <div className='sigepec-page-createSteps'>
                         <strong >Check In</strong>  - <strong className='active'>Composition</strong>
@@ -131,7 +148,6 @@ const Test = () => {
                                 </p>
                                 <br />
                                 <span>Démarrer la composition l'examen</span>
-
                             </div>
                         </button>
                     </div>
