@@ -97,7 +97,7 @@ const MainLayout = ({title, min = false, children, admin = null}) => {
                 <div className='sigepec-layout-mainNavigation__container'>
                     <header className='sigepec-layout-mainNavigation__header'>
                         <Link to={links.home}>
-                            <img src={logo} alt="dgttm" />
+                            <img src={"/images/logo.png"} alt="dgttm" />
                         </Link>
                     </header>
                     <nav className='sigepec-layout-mainNavigation__navigation sigepec-layout-mainNavigation-navigation'>

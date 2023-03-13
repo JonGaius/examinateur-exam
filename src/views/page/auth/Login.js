@@ -69,7 +69,7 @@ const Login = () => {
     },[email, password, user, navigate, isError,isSuccess, isLoading])
 
     return (
-        <AuthLayout image={auth} title={"Connexion"} subtitle={"Accès réservés"}>
+        <AuthLayout image={"/images/auth.png"} title={"Connexion"} subtitle={"Accès réservés"}>
             <form className='sigepec-auth-form' onSubmit={handleSubmit}>
 
                 {

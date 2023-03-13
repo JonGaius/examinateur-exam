@@ -7,7 +7,7 @@ const AuthLayout = ({title, subtitle, image, children}) => {
     return (
         <>
             <section className='sigepec-auth__image sigepec-auth-image'>
-                <img src={image} alt="auth" />
+                <img src={"/images/logo.png"} alt="auth" />
             </section>
             <section className='sigepec-auth__formContainer sigepec-auth-formContainer'>
                 <div className='sigepec-auth-formContainer__container'>
