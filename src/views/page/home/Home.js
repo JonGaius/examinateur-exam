@@ -11,6 +11,7 @@ import { links } from '../../../router/constant';
 import ModuleItem from '../../components/card/ModuleItem';
 import EmptySection from '../../components/container/EmptySection';
 import MainLayout from '../../layout/MainLayout';
+import {capitalize} from "../../../utils/sharedFunction";
 
 const Home = () => {
 
@@ -46,6 +47,7 @@ const Home = () => {
         return () => {
             dispatch(reset())
             dispatch(examReset())
+            window.location.reload()
         }
     },[dispatch, examinateur])
 
@@ -84,7 +86,6 @@ const Home = () => {
                                             state: examens.examens_du_jour.filter(el => el.statut_examen === "cloturer")[0]
                                         })
                                     }}>
-                                        {console.log(examens.examens_du_jour.filter(el => el.statut_examen === "cloturer"))}
                                         <div className='sigepec-page-content-start__icon'>
                                             <StartIcon/>
                                         </div>
@@ -92,8 +93,7 @@ const Home = () => {
                                             <span>Examen: {examens.examens_du_jour.filter(el => el.statut_examen === "cloturer")[0].code_examen} </span> <br />
                                             <strong>Commencer l'examen</strong>
                                             <p>
-                                                <span>{examens.examens_du_jour.filter(el => el.statut_examen === "cloturer")[0].details.langue}</span> - <span>{examens.examens_du_jour.filter(el => el.statut_examen === "cloturer")[0].details.mode}</span> - <span>{examens.examens_du_jour.filter(el => el.statut_examen === "cloturer")[0].details.salle.nom_salle_code}</span>
-                                                
+                                                <span>{examens.examens_du_jour.filter(el => el.statut_examen === "cloturer")[0] && examens.examens_du_jour.filter(el => el.statut_examen === "cloturer")[0].details && capitalize(examens.examens_du_jour.filter(el => el.statut_examen === "cloturer")[0].details.langue)}</span> - <span>{examens.examens_du_jour.filter(el => el.statut_examen === "cloturer")[0] && examens.examens_du_jour.filter(el => el.statut_examen === "cloturer")[0].details && capitalize(examens.examens_du_jour.filter(el => el.statut_examen === "cloturer")[0].details.mode)}</span> - <span>{examens.examens_du_jour.filter(el => el.statut_examen === "cloturer")[0] && examens.examens_du_jour.filter(el => el.statut_examen === "cloturer")[0].details && capitalize(examens.examens_du_jour.filter(el => el.statut_examen === "cloturer")[0].details.salle.nom_salle_code)}</span>
                                             </p>
                                         </div>
                                     </button>
