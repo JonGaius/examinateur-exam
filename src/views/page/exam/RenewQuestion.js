@@ -34,26 +34,29 @@ const RenewQuestion = ({exam, questIndex, fncQuesion, sujet, socket, examen, lan
     let navigate = useNavigate()
 
     const choiceAudio = useCallback(
-        () => {
-            switch (langue) {
-                case "français":
-                    setMusiPath(URLIMAGE+sujet.questions[questIndex].audio_fr)
-                    break;
-                case "mooré":
-                    setMusiPath(URLIMAGE+sujet.questions[questIndex].audio_moore)
-                    break;
 
-                case "dioula":
-                    setMusiPath(URLIMAGE+sujet.questions[questIndex].audio_dioula)
-                    break;
-        
-                case "fulfuldé":
-                    setMusiPath(URLIMAGE+"sujet.questions[questIndex].audio_fulfulde")
-                    break;
-                        
-                default:
-                    setMusiPath("")
-                    break;
+        () => {
+            if(sujet.questions[questIndex]){
+                switch (langue) {
+                    case "français":
+                        setMusiPath(URLIMAGE+sujet.questions[questIndex].audio_fr)
+                        break;
+                    case "mooré":
+                        setMusiPath(URLIMAGE+sujet.questions[questIndex].audio_moore)
+                        break;
+
+                    case "dioula":
+                        setMusiPath(URLIMAGE+sujet.questions[questIndex].audio_dioula)
+                        break;
+
+                    case "fulfuldé":
+                        setMusiPath(URLIMAGE+"sujet.questions[questIndex].audio_fulfulde")
+                        break;
+
+                    default:
+                        setMusiPath("")
+                        break;
+                }
             }
         },[langue, sujet, questIndex]
     )
@@ -86,10 +89,19 @@ const RenewQuestion = ({exam, questIndex, fncQuesion, sujet, socket, examen, lan
         }
     }
     useEffect(() => {
-        const music = new Audio(musicPath);
-        if(repeat){
-            music.play();
-            setRepeat(!repeat)
+        if(musicPath){
+            try {
+                const music = new Audio(musicPath);
+                if(music){
+                    if(repeat){
+                        music.play();
+                        setRepeat(!repeat)
+                    }
+                }
+            }catch (e) {
+                console.log(e)
+            }
+
         }
     },[musicPath,repeat])
 
