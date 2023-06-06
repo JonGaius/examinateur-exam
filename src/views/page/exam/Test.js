@@ -88,14 +88,22 @@ const Test = () => {
     },[dispatch, state, navigate])
 
     useEffect(() => {
-        const music = new Audio(musicIPath);
-        if(playMusic){
-            music.play();
-            setPlayMusic(!playMusic)
-        }else{
-            music.pause()
+        if(musicIPath){
+            const music = new Audio(musicIPath);
+            if(playMusic){
+                music.play();
+                setPlayMusic(!playMusic)
+            }else{
+                music.pause()
+            }
         }
     },[musicIPath, playMusic])
+
+    useEffect(() => {
+        return () => {
+            window.location.reload()
+        }
+    }, [])
 
     if(isLoading){
         return (
