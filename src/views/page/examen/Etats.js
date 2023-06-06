@@ -122,7 +122,6 @@ const Etats = () => {
                             <div className='sigepec-filedarianne'>
                                 <Link to={links.home}>Accueil</Link> / <span> Mes états</span>
                             </div>
-
                             <div className='sigepec-page-header2'>
                                 <div className='sigepec-page-title'>
                                     {/* <h2>Programmation</h2> */}
@@ -130,7 +129,7 @@ const Etats = () => {
                                 </div>
                                 <div className='sigepec-page-header2__actions'>
                                     {
-                                        isSuccess && examens && examens.length > 0 ? (
+                                        isSuccess && examens && [...examens].length > 0 ? (
                                             <div className='sigepec-page-header2__action'>
                                                 <button type='button' className='sigepec-button sigepec-button--secondary' onClick={() => generatePDF()}>
                                                     <span>Exporter en pdf</span>
@@ -186,16 +185,15 @@ const Etats = () => {
                                     ) : (
                                         isSuccess && (
                                             <div className='sigepec-page-tabContainer'>
-
                                                 <div className='sigepec-page-tabContainer__header sigepec-page-tabContainer-header'>
                                                     {
-                                                        examens && (limit <= examens.length) && (
+                                                        examens && (limit <= [...examens].length) && (
                                                             <>
                                                                 <div className='sigepec-page-tabContainer-header__pagination'>
                                                                     <button type='button' className={`sigepec-button-icon sigepec-button-icon--normal ${debut < 1 ? "is--disable" : "" }`} onClick={() => prevPage()}>
                                                                         <BackIcon/> <span>Précédent</span>
                                                                     </button>
-                                                                    <button type='button' className={`sigepec-button-icon sigepec-button-icon--normal ${fin > examens.length - 1 ? "is--disable" : "" }`} onClick={() => nextPage()}>
+                                                                    <button type='button' className={`sigepec-button-icon sigepec-button-icon--normal ${fin > [...examens].length - 1 ? "is--disable" : "" }`} onClick={() => nextPage()}>
                                                                         <NextIcon/> <span>Suivant</span>
                                                                     </button>
                                                                 </div>
@@ -203,28 +201,27 @@ const Etats = () => {
                                                         )
                                                     }
                                                 </div>
-                                              
                                                 {
-                                                    [...examens] && [...examens].length > 0 ? (
+                                                    examens && [...examens].length > 0 ? (
                                                         <div className='sigepec-page-tabContainer__body sigepec-page-tabContainer-body'>
                                                             {
-                                                            parseInt(examens
+                                                            parseInt([...examens]
                                                                 .length / limit) > 0 ? (
                                                                 <strong>
                                                                     {
-                                                                        examens
+                                                                        [...examens]
                                                                         .length % limit > 0 ? (
-                                                                            `Page ${page} sur ${parseInt(examens
+                                                                            `Page ${page} sur ${parseInt([...examens]
                                                                                 .length / limit) + 1}`
                                                                         ) : (
-                                                                            `Page ${page} sur ${parseInt(examens
+                                                                            `Page ${page} sur ${parseInt([...examens]
                                                                                 .length / limit)}`
                                                                         )
                                                                     }
                                                                     
                                                                 </strong>
                                                             ) : (
-                                                                <strong>Page {page} sur {parseInt(examens
+                                                                <strong>Page {page} sur {parseInt([...examens]
                                                                     .length / limit) + 1}</strong>
                                                             )
                                                         }
@@ -255,7 +252,7 @@ const Etats = () => {
 
                                                                 <div className='sigepec-table__body sigepec-table-body'>
                                                                     {
-                                                                        examens
+                                                                        [...examens]
                                                                         .slice(debut, fin)
                                                                         .map((exam, index) => (
                                                                             <div className='sigepec-table__row sigepec-table-row' key={index}>
@@ -271,7 +268,7 @@ const Etats = () => {
                                                                                 <div className='sigepec-table__column sigepec-table-column sigepec-table-column--xl2'>
                                                                                     <p>
                                                                                         <span>{exam.lieu}</span> <br />
-                                                                                        <strong>{exam.details && exam.details.salle.nom_salle_code}</strong>
+                                                                                        <strong>{exam.details && exam.details?.salle?.nom_salle_code}</strong>
                                                                                     </p>
                                                                                 </div>
                                                                                 <div className='sigepec-table__column sigepec-table-column sigepec-table-column--xm'>
@@ -303,7 +300,6 @@ const Etats = () => {
                                                         </EmptySection>
                                                     )
                                                 }
-
                                                 <div className='sigepec-export-modal' id='resultat'>
                                                     <div className='sigepec-export-modal__container'>
                                                         <div className='sigepec-export-modal__close'>
@@ -339,24 +335,24 @@ const Etats = () => {
                                                                 </div>
                                                                 <div className='sigepec-export-file__tabs sigepec-export-file-tabs'>
                                                                     {
-                                                                        [...examens] && [...examens].length > 0 ? (
+                                                                        isSuccess && examens && [...examens].length > 0 ? (
                                                                             <div className='sigepec-export-file__tabs sigepec-export-file-tabs'>
-                                                                                {parseInt(examens.length / limit) > 0 ? (
+                                                                                {parseInt([...examens].length / limit) > 0 ? (
                                                                                         <strong>
                                                                                             {
-                                                                                                examens
+                                                                                                [...examens]
                                                                                                 .length % limit > 0 ? (
-                                                                                                    `Page ${page} sur ${parseInt(examens
+                                                                                                    `Page ${page} sur ${parseInt([...examens]
                                                                                                         .length / limit) + 1}`
                                                                                                 ) : (
-                                                                                                    `Page ${page} sur ${parseInt(examens
+                                                                                                    `Page ${page} sur ${parseInt([...examens]
                                                                                                         .length / limit)}`
                                                                                                 )
                                                                                             }
                                                                                             
                                                                                         </strong>
                                                                                     ) : (
-                                                                                        <strong>Page {page} sur {parseInt(examens.length / limit) + 1}</strong>
+                                                                                        <strong>Page {page} sur {parseInt([...examens].length / limit) + 1}</strong>
                                                                                     )
                                                                                 }
                                                  
@@ -430,7 +426,6 @@ const Etats = () => {
 
                             </div> 
                         </div>
-                   
                 )
             }
             <div className='sigepec-modal' id='show-modal'>
