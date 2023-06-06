@@ -3,9 +3,9 @@ import { isLoggin } from '../../utils/sharedFunction'
 import authService from './authService'
 
 // Get user from localStorage
-const user = isLoggin("auth-dgttm")
-const userInfo = JSON.parse(localStorage.getItem('auth-dgttm-user'))
-const examinateurInfo = JSON.parse(localStorage.getItem('auth-dgttm-examinateur'))
+const user = isLoggin("auth-exam")
+const userInfo = JSON.parse(localStorage.getItem('auth-exam-user'))
+const examinateurInfo = JSON.parse(localStorage.getItem('auth-exam-examinateur'))
 
 const initialState = {
     user: user ? user : null,
@@ -105,7 +105,8 @@ export const authSlice = createSlice({
         state.isEditError = false
         state.isEditLoading = false
         state.isEditSuccess = false
-        state.message = ''
+
+        state.examen = null
       },
     },
     extraReducers: (builder) => {
